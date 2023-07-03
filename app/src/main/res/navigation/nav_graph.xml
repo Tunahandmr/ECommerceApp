@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/signInFragment">
+
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.tunahan.ecommerceapp.view.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signInFragment_to_adminSignInFragment"
+            app:destination="@id/adminSignInFragment" />
+        <action
+            android:id="@+id/action_signInFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminSignInFragment"
+        android:name="com.tunahan.ecommerceapp.view.AdminSignInFragment"
+        android:label="fragment_admin_sign_in"
+        tools:layout="@layout/fragment_admin_sign_in" >
+        <action
+            android:id="@+id/action_adminSignInFragment_to_adminFragment"
+            app:destination="@id/adminFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.tunahan.ecommerceapp.view.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
+    <fragment
+        android:id="@+id/adminFragment"
+        android:name="com.tunahan.ecommerceapp.view.admin.AdminFragment"
+        android:label="fragment_admin"
+        tools:layout="@layout/fragment_admin" >
+        <action
+            android:id="@+id/action_adminFragment_to_adminAddFragment"
+            app:destination="@id/adminAddFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminAddFragment"
+        android:name="com.tunahan.ecommerceapp.view.admin.AdminAddFragment"
+        android:label="fragment_admin_add"
+        tools:layout="@layout/fragment_admin_add" />
+</navigation>
