@@ -5,8 +5,9 @@
     android:id="@+id/categoryCard"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="16dp"
-    android:layout_margin="4dp">
+    app:cardCornerRadius="12dp"
+    android:layout_margin="2dp"
+    >
 
     <TextView
         android:id="@+id/categoryText"
@@ -15,6 +16,7 @@
         android:padding="5dp"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         android:background="@drawable/custom_book"
         tools:text="@tools:sample/lorem" />
 

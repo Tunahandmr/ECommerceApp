@@ -13,7 +13,6 @@ import com.tunahan.ecommerceapp.databinding.FragmentAdminBinding
 class AdminFragment : Fragment() {
 
     private var _binding: FragmentAdminBinding? = null
-
     private val binding get() = _binding!!
 
     override fun onCreateView(

@@ -1,4 +1,4 @@
-package com.tunahan.ecommerceapp.view
+package com.tunahan.ecommerceapp.view.sign
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,14 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.tunahan.ecommerceapp.R
 import com.tunahan.ecommerceapp.databinding.FragmentAdminSignInBinding
 
 
 class AdminSignInFragment : Fragment() {
 
     private var _binding: FragmentAdminSignInBinding? = null
-
     private val binding get() = _binding!!
 
     override fun onCreateView(
