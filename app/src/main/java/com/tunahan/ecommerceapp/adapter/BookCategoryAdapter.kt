@@ -31,9 +31,11 @@ class BookCategoryAdapter(private val categoryList:ArrayList<String>): RecyclerV
         }
 
         if(selectItem==position){
-            holder.itemView.categoryCard.setCardBackgroundColor(Color.parseColor("#FFFF00"))
+            holder.itemView.categoryCard.setCardBackgroundColor(Color.parseColor("#0D47A1"))
+            holder.itemView.categoryText.setTextColor(Color.parseColor("#FFFFFF"))
         }else{
             holder.itemView.categoryCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+            holder.itemView.categoryText.setTextColor(Color.parseColor("#000000"))
         }
 
     }

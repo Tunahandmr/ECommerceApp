@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.tunahan.ecommerceapp.R
 import com.tunahan.ecommerceapp.databinding.FragmentSearchBinding
-
 
 class SearchFragment : Fragment() {
 
@@ -21,8 +19,6 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-
-
         return binding.root
     }
 
@@ -30,7 +26,6 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.searchView.requestFocus()
-        binding.searchView.isIconified = false
 
         binding.backButton.setOnClickListener {
             findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToHomeFragment())

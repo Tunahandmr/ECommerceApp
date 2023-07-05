@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "280731499589",
+    "project_id": "ecommerceapp-88099",
+    "storage_bucket": "ecommerceapp-88099.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:280731499589:android:c9940aff4425a82a16372c",
+        "android_client_info": {
+          "package_name": "com.tunahan.ecommerceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "280731499589-rvrliamor6p0vtkhtvobitrgfcjmkb8p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tunahan.ecommerceapp",
+            "certificate_hash": "792c3185d8bf253e3bee4072fd72cc6bb3a9c899"
+          }
+        },
+        {
+          "client_id": "280731499589-38bpiabbi8cslo722tos6957r6ueaglf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAgfA6YVZ6LLwL1P9yAlVMYyMpmk42blY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "280731499589-38bpiabbi8cslo722tos6957r6ueaglf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

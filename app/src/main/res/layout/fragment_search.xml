@@ -37,6 +37,10 @@
             android:layout_height="wrap_content"
             app:searchIcon="@null"
             app:iconifiedByDefault="false"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:clickable="true"
+            app:autoShowKeyboard="true"
             app:queryBackground="@android:color/transparent"
             app:queryHint="Search book" />
 
