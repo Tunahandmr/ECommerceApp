@@ -71,10 +71,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:text="Add product"
-                        android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="20sp"
-                        android:textStyle="bold"
                         android:visibility="gone"
                         app:drawableEndCompat="@drawable/ic_arrow_right" />
 
@@ -87,10 +85,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:text="Update password"
-                        android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="20sp"
-                        android:textStyle="bold"
                         app:drawableEndCompat="@drawable/ic_arrow_right" />
 
                     <TextView
@@ -101,10 +97,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:text="Delete user"
-                        android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="20sp"
-                        android:textStyle="bold"
                         app:drawableEndCompat="@drawable/ic_arrow_right" />
 
                     <TextView
@@ -115,10 +109,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:text="Exit"
-                        android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="20sp"
-                        android:textStyle="bold"
                         app:drawableEndCompat="@drawable/ic_arrow_right"
                         />
 

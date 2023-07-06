@@ -23,7 +23,7 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_gravity="center"
-           android:text="Search book"
+           android:hint="Search book"
            android:textSize="18sp"
            app:drawableStartCompat="@drawable/ic_search" />
 

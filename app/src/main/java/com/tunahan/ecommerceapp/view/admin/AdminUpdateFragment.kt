@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.tunahan.ecommerceapp.adapter.BookCategoryAdapter
 import com.tunahan.ecommerceapp.databinding.FragmentAdminUpdateBinding
 
@@ -31,7 +32,12 @@ class AdminUpdateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         listAdd()
-        bookCategoryAdapter = BookCategoryAdapter(mList)
+        bookCategoryAdapter = BookCategoryAdapter(mList,object : BookCategoryAdapter.OnClickListener{
+            override fun onClick(item: String) {
+                Toast.makeText(requireContext(),item, Toast.LENGTH_LONG).show()
+            }
+
+        })
         val rv = binding.categoryRV
         rv.adapter = bookCategoryAdapter
     }
