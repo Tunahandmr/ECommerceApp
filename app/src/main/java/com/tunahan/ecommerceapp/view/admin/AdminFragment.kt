@@ -62,7 +62,7 @@ class AdminFragment : Fragment() {
                         productList.clear()
                         for (document in documents) {
 
-                            val url = document.get("imageUrl") as String?
+                            val url = document.get("downloadUrl") as String?
                             val bookName = document.get("bookName") as String?
                             val price = document.get("price") as String?
                             val writer = document.get("writer") as String?
