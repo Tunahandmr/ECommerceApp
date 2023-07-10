@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="5dp"
+    android:layout_margin="5dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/favoriteIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_favorite_border"
+            android:layout_gravity="end"/>
+
+        <ImageView
+            android:id="@+id/homeProductIV"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_launcher_foreground"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/productNameTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="15"
+            android:ellipsize="end"
+            android:text="Product name"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            />
+        <TextView
+            android:id="@+id/productPriceTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="250 Tl"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            />
+
+
+            <TextView
+                android:id="@+id/addCartTV"
+                android:layout_marginTop="8dp"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add cart"
+                android:background="@drawable/custom_book"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                />
+
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

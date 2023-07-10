@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.tunahan.ecommerceapp.adapter.BookCategoryAdapter
 import com.tunahan.ecommerceapp.databinding.FragmentAdminUpdateBinding
 
@@ -18,6 +21,9 @@ class AdminUpdateFragment : Fragment() {
 
     private val mList = ArrayList<String>()
     private lateinit var bookCategoryAdapter: BookCategoryAdapter
+
+    private val db = Firebase.firestore
+    private val storage = Firebase.storage
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +47,7 @@ class AdminUpdateFragment : Fragment() {
         val rv = binding.categoryRV
         rv.adapter = bookCategoryAdapter
     }
+
 
 
     private fun listAdd(){

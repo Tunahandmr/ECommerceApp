@@ -48,7 +48,7 @@ class AdminAddFragment : Fragment() {
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private var selectedPicture: Uri? = null
     private var selectedBitmap: Bitmap? = null
-    
+
     private val db = Firebase.firestore
     private val storage = Firebase.storage
 
@@ -86,7 +86,6 @@ class AdminAddFragment : Fragment() {
 
 
     }
-
 
     private fun uploadProduct() {
         if (selectedPicture != null) {
@@ -132,7 +131,10 @@ class AdminAddFragment : Fragment() {
 
 
                     db.collection("books").add(addMap).addOnCompleteListener { task ->
+
                         if (task.isSuccessful) {
+                            val docID = task.result.id
+                            println(docID)
                             findNavController().navigate(AdminAddFragmentDirections.actionAdminAddFragmentToAdminFragment())
                         }
                     }.addOnFailureListener { exception ->
@@ -156,7 +158,6 @@ class AdminAddFragment : Fragment() {
          */
     }
 
-    //permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
     private fun imageClick() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

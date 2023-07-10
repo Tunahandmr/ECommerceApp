@@ -35,7 +35,7 @@ class AdminFragment : Fragment() {
         _binding = FragmentAdminBinding.inflate(inflater, container, false)
         val layoutManager = LinearLayoutManager(requireContext())
         binding.adminPageRecyclerview.layoutManager = layoutManager
-        adminAdapter = AdminAdapter(productList)
+        adminAdapter = AdminAdapter(productList,requireContext())
         binding.adminPageRecyclerview.adapter = adminAdapter
         return binding.root
     }
