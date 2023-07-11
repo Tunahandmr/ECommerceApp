@@ -2,26 +2,18 @@ package com.tunahan.ecommerceapp.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.squareup.picasso.Picasso
-import com.tunahan.ecommerceapp.R
-import com.tunahan.ecommerceapp.databinding.CategoryRowBinding
 import com.tunahan.ecommerceapp.databinding.RecyclerAdminRowBinding
 import com.tunahan.ecommerceapp.model.Product
 import com.tunahan.ecommerceapp.view.admin.AdminFragmentDirections
-import kotlinx.android.synthetic.main.recycler_admin_row.view.bookNameText
-import kotlinx.android.synthetic.main.recycler_admin_row.view.priceText
-import kotlinx.android.synthetic.main.recycler_admin_row.view.recyclerIV
 
 class AdminAdapter(
     private val productList: ArrayList<Product>,
     private val context:Context
 ) : RecyclerView.Adapter<AdminAdapter.AdminViewHolder>() {
-
 
     class AdminViewHolder(val binding: RecyclerAdminRowBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -38,7 +30,7 @@ class AdminAdapter(
         val currentList = productList[position]
 
         holder.binding.bookNameText.text = currentList.bookName
-        holder.binding.priceText.text = "${currentList.price} tl"
+        holder.binding.priceText.text = "${currentList.price} $"
         //Picasso.get().load(currentList.downloadUrl).into(holder.binding.recyclerIV)
         Glide.with(context)
             .load(currentList.downloadUrl)
@@ -46,10 +38,13 @@ class AdminAdapter(
             .into(holder.binding.recyclerIV)
 
         holder.binding.cardView.setOnClickListener {
-            val action = AdminFragmentDirections.actionAdminFragmentToAdminUpdateFragment()
+            val action = AdminFragmentDirections.actionAdminFragmentToAdminUpdateFragment(productList.size,position)
             Navigation.findNavController(it).navigate(action)
         }
     }
 
+    fun getSize():Int{
+        return productList.size
+    }
 
 }

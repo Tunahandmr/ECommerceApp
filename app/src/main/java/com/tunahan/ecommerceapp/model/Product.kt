@@ -8,5 +8,4 @@ data class Product(
     var publisher: String?,
     var pageCount: String?,
     var publicationYear: String?,
-    var language: String?,
-)
+    var language: String?)

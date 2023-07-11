@@ -23,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
@@ -31,6 +32,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.tunahan.ecommerceapp.adapter.BookCategoryAdapter
 import com.tunahan.ecommerceapp.databinding.FragmentAdminAddBinding
+import com.tunahan.ecommerceapp.model.Document
+import com.tunahan.ecommerceapp.viewmodel.HomeViewModel
 import java.io.ByteArrayOutputStream
 import java.util.UUID
 
@@ -43,6 +46,8 @@ class AdminAddFragment : Fragment() {
     private val mList = ArrayList<String>()
     private lateinit var bookCategoryAdapter: BookCategoryAdapter
     var category = ""
+
+    private lateinit var mHomeViewModel: HomeViewModel
 
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
@@ -58,6 +63,9 @@ class AdminAddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAdminAddBinding.inflate(inflater, container, false)
+
+        mHomeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
+
         bookCategoryAdapter =
             BookCategoryAdapter(mList, object : BookCategoryAdapter.OnClickListener {
                 override fun onClick(item: String) {
@@ -133,8 +141,11 @@ class AdminAddFragment : Fragment() {
                     db.collection("books").add(addMap).addOnCompleteListener { task ->
 
                         if (task.isSuccessful) {
+                            // get document id
                             val docID = task.result.id
-                            println(docID)
+                            val document = Document(0,docID)
+                            mHomeViewModel.addNote(document)
+
                             findNavController().navigate(AdminAddFragmentDirections.actionAdminAddFragmentToAdminFragment())
                         }
                     }.addOnFailureListener { exception ->

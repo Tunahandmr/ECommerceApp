@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -26,6 +27,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+    private var count = 0
     private lateinit var homeProductAdapter: HomeProductAdapter
     private val mList = ArrayList<String>()
     private lateinit var bookCategoryAdapter: BookCategoryAdapter
@@ -64,10 +66,10 @@ class HomeFragment : Fragment() {
 
         listAdd()
 
-        repeat(1){
+        if (count==0){
             readAllData()
+            count++
         }
-
 
         binding.cardView.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment())
