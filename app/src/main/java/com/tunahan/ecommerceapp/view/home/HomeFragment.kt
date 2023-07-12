@@ -99,7 +99,9 @@ class HomeFragment : Fragment() {
                             val publicationYear = document.get("publicationYear") as String?
                             val language = document.get("language") as String?
 
+                            val bookUuid = document?.get("bookUuid") as String?
                             val readProduct = Product(
+                                bookUuid,
                                 url,
                                 bookName,
                                 price,
@@ -142,8 +144,10 @@ class HomeFragment : Fragment() {
                                 val pageCount = document.get("pageCount") as String?
                                 val publicationYear = document.get("publicationYear") as String?
                                 val language = document.get("language") as String?
+                                val bookUuid = document?.get("bookUuid") as String?
 
                                 val readProduct = Product(
+                                    bookUuid,
                                     url,
                                     bookName,
                                     price,

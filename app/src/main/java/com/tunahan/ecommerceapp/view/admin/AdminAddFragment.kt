@@ -124,6 +124,7 @@ class AdminAddFragment : Fragment() {
                     val publicationYear = binding.publicationYearText.text.toString()
                     val language = binding.languageText.text.toString()
 
+                    val bookUuid = UUID.randomUUID()
                     val addMap = hashMapOf<String, Any>()
 
                     addMap["date"] = date
@@ -136,15 +137,17 @@ class AdminAddFragment : Fragment() {
                     addMap["language"] = language
                     addMap["category"] = category
                     addMap["downloadUrl"] = dowloadUrl
+                    addMap["bookUuid"] = bookUuid.toString()
 
 
-                    db.collection("books").add(addMap).addOnCompleteListener { task ->
+
+                    db.collection("books").document(bookUuid.toString()).set(addMap).addOnCompleteListener { task ->
 
                         if (task.isSuccessful) {
                             // get document id
-                            val docID = task.result.id
-                            val document = Document(0,docID)
-                            mHomeViewModel.addNote(document)
+                            //val docID = task.result.id
+                           // val document = Document(0, docID)
+                          //  mHomeViewModel.addNote(document)
 
                             findNavController().navigate(AdminAddFragmentDirections.actionAdminAddFragmentToAdminFragment())
                         }
@@ -163,10 +166,6 @@ class AdminAddFragment : Fragment() {
             }
         }
 
-
-        /*
-
-         */
     }
 
     private fun imageClick() {

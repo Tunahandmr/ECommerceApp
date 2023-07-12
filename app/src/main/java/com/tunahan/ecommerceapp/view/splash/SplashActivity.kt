@@ -21,7 +21,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         //hide status bar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+     /*   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
             val insetsController = window.insetsController
             insetsController?.let {
@@ -32,7 +32,7 @@ class SplashActivity : AppCompatActivity() {
             val decorView = window.decorView
             val uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
             decorView.systemUiVisibility = uiOptions
-        }
+        }*/
 
         CoroutineScope(Dispatchers.Main).launch {
             delay(2000)

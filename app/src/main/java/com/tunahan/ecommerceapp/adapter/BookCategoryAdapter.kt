@@ -50,4 +50,9 @@ private val onClickEvent:OnClickListener) :
     override fun getItemCount(): Int {
         return categoryList.size
     }
+
+    fun setData(newPosition:Int){
+        selectItem=newPosition
+        notifyDataSetChanged()
+    }
 }

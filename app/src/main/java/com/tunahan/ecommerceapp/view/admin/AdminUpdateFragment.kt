@@ -1,11 +1,20 @@
 package com.tunahan.ecommerceapp.view.admin
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -21,6 +30,7 @@ import com.tunahan.ecommerceapp.databinding.FragmentAdminUpdateBinding
 import com.tunahan.ecommerceapp.model.Document
 import com.tunahan.ecommerceapp.model.Product
 import com.tunahan.ecommerceapp.viewmodel.HomeViewModel
+import java.util.UUID
 
 
 class AdminUpdateFragment : Fragment() {
@@ -34,14 +44,18 @@ class AdminUpdateFragment : Fragment() {
     private lateinit var bookCategoryAdapter: BookCategoryAdapter
     private var productList = ArrayList<Product>()
     private val args by navArgs<AdminUpdateFragmentArgs>()
-    private var documentId = ""
     private val db = Firebase.firestore
     private val storage = Firebase.storage
 
+    var category = ""
+
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+
+    private var selectedPicture: Uri? = null
+    private var selectedBitmap: Bitmap? = null
+
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAdminUpdateBinding.inflate(inflater, container, false)
         mHomeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
@@ -51,28 +65,32 @@ class AdminUpdateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val positionToSize = args.listSize - (args.position + 1)
-        mHomeViewModel.readAllData.observe(viewLifecycleOwner, Observer { document ->
-            documentId = document[positionToSize].documentID.toString()
-            val docId = document[positionToSize].documentID.toString()
-            readData(docId)
-        })
 
+        readData(args.documentUuid)
 
         binding.updateBookButton.setOnClickListener {
-            updateData(documentId)
+            updateData(args.documentUuid)
         }
 
         binding.deleteBookButton.setOnClickListener {
-            println(documentId)
+            deleteData(args.documentUuid)
         }
+
+        registerLauncher()
+
+        binding.addImage.setOnClickListener {
+            val intentToGallery =
+                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            activityResultLauncher.launch(intentToGallery)
+        }
+
 
 
         listAdd()
         bookCategoryAdapter =
             BookCategoryAdapter(mList, object : BookCategoryAdapter.OnClickListener {
                 override fun onClick(item: String) {
-                    Toast.makeText(requireContext(), item, Toast.LENGTH_LONG).show()
+                    category = item
                 }
             })
         val rv = binding.categoryRV
@@ -98,6 +116,21 @@ class AdminUpdateFragment : Fragment() {
                 val pageCount = document?.get("pageCount") as String?
                 val publicationYear = document?.get("publicationYear") as String?
                 val language = document?.get("language") as String?
+                val category = document?.get("category") as String?
+
+                val bookUuid = document?.get("bookUuid") as String?
+                println(bookUuid)
+                var myCounter: Int? = null
+                when (category) {
+                    "Classics" -> myCounter = 0
+                    "Fantasy" -> myCounter = 1
+                    "Horror" -> myCounter = 2
+                    "Self-improvement" -> myCounter = 3
+                    "History" -> myCounter = 4
+                    "Philosophy" -> myCounter = 5
+
+                }
+                bookCategoryAdapter.setData(myCounter ?: 0)
 
                 binding.bookNameText.setText(bookName)
                 binding.priceText.setText(price)
@@ -116,38 +149,109 @@ class AdminUpdateFragment : Fragment() {
     }
 
     private fun updateData(docId: String) {
-        //  val dowloadUrl = uri.toString()
-      //  val date = Timestamp.now()
-        val bookName = binding.bookNameText.text.toString()
-        val price = binding.priceText.text.toString()
-        val writer = binding.writerText.text.toString()
-        val publisher = binding.publisherText.text.toString()
-        val pageCount = binding.pageCountText.text.toString()
-        val publicationYear = binding.publicationYearText.text.toString()
-        val language = binding.languageText.text.toString()
 
-        val addMap = hashMapOf<String, Any>()
-
-      //  addMap["date"] = date
-        addMap["bookName"] = bookName
-        addMap["price"] = price
-        addMap["writer"] = writer
-        addMap["publisher"] = publisher
-        addMap["pageCount"] = pageCount
-        addMap["publicationYear"] = publicationYear
-        addMap["language"] = language
-        //addMap["category"] = category
-        //  addMap["downloadUrl"] = dowloadUrl
+        if (selectedPicture != null) {
+            val reference = storage.reference
+            val uuid = UUID.randomUUID()
+            val imageName = "${uuid}.jpg"
+            val imageReference = reference.child("images").child(imageName)
 
 
-        db.collection("books").document(docId).update(addMap).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
+            imageReference.putFile(selectedPicture!!).addOnSuccessListener { task ->
+                //get url
+                val loadImageReference = reference.child("images").child(imageName)
 
+                loadImageReference.downloadUrl.addOnSuccessListener { uri ->
+
+                    val dowloadUrl = uri.toString()
+                    val date = Timestamp.now()
+                    val bookName = binding.bookNameText.text.toString()
+                    val price = binding.priceText.text.toString()
+                    val writer = binding.writerText.text.toString()
+                    val publisher = binding.publisherText.text.toString()
+                    val pageCount = binding.pageCountText.text.toString()
+                    val publicationYear = binding.publicationYearText.text.toString()
+                    val language = binding.languageText.text.toString()
+
+                    val addMap = hashMapOf<String, Any>()
+
+                    addMap["date"] = date
+                    addMap["bookName"] = bookName
+                    addMap["price"] = price
+                    addMap["writer"] = writer
+                    addMap["publisher"] = publisher
+                    addMap["pageCount"] = pageCount
+                    addMap["publicationYear"] = publicationYear
+                    addMap["language"] = language
+                    addMap["category"] = category
+                    addMap["downloadUrl"] = dowloadUrl
+
+
+                    db.collection("books").document(docId).update(addMap)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+
+                                findNavController().navigate(AdminUpdateFragmentDirections.actionAdminUpdateFragmentToAdminFragment())
+                            }
+                        }.addOnFailureListener { exception ->
+                            Toast.makeText(
+                                requireContext(), exception.localizedMessage, Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+
+                }
+
+
+            }
+        }
+    }
+
+    private fun registerLauncher() {
+        activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == Activity.RESULT_OK) {
+                    val intentFromResult = it.data
+                    if (intentFromResult != null) {
+                        selectedPicture = intentFromResult.data
+
+                        try {
+                            if (Build.VERSION.SDK_INT >= 28) {
+                                val source = ImageDecoder.createSource(
+                                    requireActivity().contentResolver, selectedPicture!!
+                                )
+                                selectedBitmap = ImageDecoder.decodeBitmap(source)
+                                binding.addImage.setImageBitmap(selectedBitmap)
+
+                            } else {
+                                selectedBitmap = MediaStore.Images.Media.getBitmap(
+                                    requireActivity().contentResolver, selectedPicture
+                                )
+                                binding.addImage.setImageBitmap(selectedBitmap)
+
+                            }
+
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+
+                    }
+                }
+
+            }
+
+
+    }
+
+    private fun deleteData(docId: String) {
+        db.collection("books").document(docId).delete()
+            .addOnSuccessListener {
                 findNavController().navigate(AdminUpdateFragmentDirections.actionAdminUpdateFragmentToAdminFragment())
             }
-        }.addOnFailureListener { exception ->
-            Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG).show()
-        }
+            .addOnFailureListener { exception ->
+                Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG)
+                    .show()
+            }
     }
 
     private fun listAdd() {

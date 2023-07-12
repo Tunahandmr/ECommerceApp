@@ -29,16 +29,17 @@ class AdminAdapter(
     override fun onBindViewHolder(holder: AdminViewHolder, position: Int) {
         val currentList = productList[position]
 
+        val currentUuid = currentList.documentUuid.toString()
+        holder.binding.uuidText.text = currentUuid
         holder.binding.bookNameText.text = currentList.bookName
         holder.binding.priceText.text = "${currentList.price} $"
-        //Picasso.get().load(currentList.downloadUrl).into(holder.binding.recyclerIV)
         Glide.with(context)
             .load(currentList.downloadUrl)
             .skipMemoryCache(true)//for caching the image url in case phone is offline
             .into(holder.binding.recyclerIV)
 
         holder.binding.cardView.setOnClickListener {
-            val action = AdminFragmentDirections.actionAdminFragmentToAdminUpdateFragment(productList.size,position)
+            val action = AdminFragmentDirections.actionAdminFragmentToAdminUpdateFragment(productList.size,position,currentUuid)
             Navigation.findNavController(it).navigate(action)
         }
     }

@@ -1,6 +1,7 @@
 package com.tunahan.ecommerceapp.model
 
 data class Product(
+    var documentUuid:String?,
     var downloadUrl: String?,
     var bookName: String?,
     var price: String?,
