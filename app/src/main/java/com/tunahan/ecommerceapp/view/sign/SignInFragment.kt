@@ -36,7 +36,7 @@ class SignInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-         val currentUser = auth.currentUser
+        val currentUser = auth.currentUser
         if (currentUser != null)
             findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToHomeFragment())
 

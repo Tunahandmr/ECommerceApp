@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
 
             when (destination.id) {
+                R.id.searchFragment,
+                R.id.updatePasswordFragment,
                 R.id.forgotPasswordFragment,
                 R.id.signInFragment,
                 R.id.signUpFragment,

@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -24,10 +23,8 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.tunahan.ecommerceapp.adapter.AdminAdapter
 import com.tunahan.ecommerceapp.adapter.BookCategoryAdapter
 import com.tunahan.ecommerceapp.databinding.FragmentAdminUpdateBinding
-import com.tunahan.ecommerceapp.model.Document
 import com.tunahan.ecommerceapp.model.Product
 import com.tunahan.ecommerceapp.viewmodel.HomeViewModel
 import java.util.UUID
@@ -47,7 +44,7 @@ class AdminUpdateFragment : Fragment() {
     private val db = Firebase.firestore
     private val storage = Firebase.storage
 
-    var category = ""
+    var myCategory = ""
 
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
@@ -90,7 +87,7 @@ class AdminUpdateFragment : Fragment() {
         bookCategoryAdapter =
             BookCategoryAdapter(mList, object : BookCategoryAdapter.OnClickListener {
                 override fun onClick(item: String) {
-                    category = item
+                    myCategory = item
                 }
             })
         val rv = binding.categoryRV
@@ -117,10 +114,12 @@ class AdminUpdateFragment : Fragment() {
                 val publicationYear = document?.get("publicationYear") as String?
                 val language = document?.get("language") as String?
                 val category = document?.get("category") as String?
-
                 val bookUuid = document?.get("bookUuid") as String?
-                println(bookUuid)
+
+
+                myCategory = category.toString()
                 var myCounter: Int? = null
+
                 when (category) {
                     "Classics" -> myCounter = 0
                     "Fantasy" -> myCounter = 1
@@ -130,8 +129,8 @@ class AdminUpdateFragment : Fragment() {
                     "Philosophy" -> myCounter = 5
 
                 }
-                bookCategoryAdapter.setData(myCounter ?: 0)
 
+                bookCategoryAdapter.setData(myCounter ?: 0)
                 binding.bookNameText.setText(bookName)
                 binding.priceText.setText(price)
                 binding.writerText.setText(writer)
@@ -149,6 +148,7 @@ class AdminUpdateFragment : Fragment() {
     }
 
     private fun updateData(docId: String) {
+        val addMap = hashMapOf<String, Any>()
 
         if (selectedPicture != null) {
             val reference = storage.reference
@@ -156,14 +156,14 @@ class AdminUpdateFragment : Fragment() {
             val imageName = "${uuid}.jpg"
             val imageReference = reference.child("images").child(imageName)
 
-
             imageReference.putFile(selectedPicture!!).addOnSuccessListener { task ->
                 //get url
                 val loadImageReference = reference.child("images").child(imageName)
 
                 loadImageReference.downloadUrl.addOnSuccessListener { uri ->
 
-                    val dowloadUrl = uri.toString()
+                    val downloadUrl = uri.toString()
+
                     val date = Timestamp.now()
                     val bookName = binding.bookNameText.text.toString()
                     val price = binding.priceText.text.toString()
@@ -173,8 +173,6 @@ class AdminUpdateFragment : Fragment() {
                     val publicationYear = binding.publicationYearText.text.toString()
                     val language = binding.languageText.text.toString()
 
-                    val addMap = hashMapOf<String, Any>()
-
                     addMap["date"] = date
                     addMap["bookName"] = bookName
                     addMap["price"] = price
@@ -183,9 +181,9 @@ class AdminUpdateFragment : Fragment() {
                     addMap["pageCount"] = pageCount
                     addMap["publicationYear"] = publicationYear
                     addMap["language"] = language
-                    addMap["category"] = category
-                    addMap["downloadUrl"] = dowloadUrl
-
+                    addMap["category"] = myCategory
+                    addMap["bookUuid"] = docId
+                    addMap["downloadUrl"] = downloadUrl
 
                     db.collection("books").document(docId).update(addMap)
                         .addOnCompleteListener { task ->
@@ -198,13 +196,45 @@ class AdminUpdateFragment : Fragment() {
                                 requireContext(), exception.localizedMessage, Toast.LENGTH_LONG
                             ).show()
                         }
-
-
                 }
-
-
             }
+        }else{
+            val date = Timestamp.now()
+            val bookName = binding.bookNameText.text.toString()
+            val price = binding.priceText.text.toString()
+            val writer = binding.writerText.text.toString()
+            val publisher = binding.publisherText.text.toString()
+            val pageCount = binding.pageCountText.text.toString()
+            val publicationYear = binding.publicationYearText.text.toString()
+            val language = binding.languageText.text.toString()
+
+            addMap["date"] = date
+            addMap["bookName"] = bookName
+            addMap["price"] = price
+            addMap["writer"] = writer
+            addMap["publisher"] = publisher
+            addMap["pageCount"] = pageCount
+            addMap["publicationYear"] = publicationYear
+            addMap["language"] = language
+            addMap["category"] = myCategory
+            addMap["bookUuid"] = docId
+
+
+            db.collection("books").document(docId).update(addMap)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+
+                        findNavController().navigate(AdminUpdateFragmentDirections.actionAdminUpdateFragmentToAdminFragment())
+                    }
+                }.addOnFailureListener { exception ->
+                    Toast.makeText(
+                        requireContext(), exception.localizedMessage, Toast.LENGTH_LONG
+                    ).show()
+                }
         }
+
+
+
     }
 
     private fun registerLauncher() {

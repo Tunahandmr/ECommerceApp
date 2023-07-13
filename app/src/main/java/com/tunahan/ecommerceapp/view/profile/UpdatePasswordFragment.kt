@@ -34,6 +34,10 @@ class UpdatePasswordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.backButton.setOnClickListener {
+            findNavController().navigate(UpdatePasswordFragmentDirections.actionUpdatePasswordFragmentToProfileFragment())
+        }
+
         binding.saveButton.setOnClickListener {
             val user = auth.currentUser
             val newPassword = binding.newPassword.text.toString()
