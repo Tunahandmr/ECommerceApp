@@ -37,9 +37,9 @@ class SignInFragment : Fragment() {
 
 
         val currentUser = auth.currentUser
-        if (currentUser != null)
+        if (currentUser != null) {
             findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToHomeFragment())
-
+        }
         binding.signInButton.setOnClickListener {
             val email = binding.email.text.toString()
             val password = binding.password.text.toString()

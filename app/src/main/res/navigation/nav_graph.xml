@@ -77,6 +77,9 @@
         <action
             android:id="@+id/action_homeFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_homeDetailsFragment"
+            app:destination="@id/homeDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
@@ -129,5 +132,17 @@
         <action
             android:id="@+id/action_updatePasswordFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeDetailsFragment"
+        android:name="com.tunahan.ecommerceapp.view.home.HomeDetailsFragment"
+        android:label="fragment_home_details"
+        tools:layout="@layout/fragment_home_details" >
+        <action
+            android:id="@+id/action_homeDetailsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <argument
+            android:name="bookUuid"
+            app:argType="string" />
     </fragment>
 </navigation>

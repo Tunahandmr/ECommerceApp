@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
@@ -12,6 +13,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.tunahan.ecommerceapp.R
 import com.tunahan.ecommerceapp.databinding.HomeProductRowBinding
 import com.tunahan.ecommerceapp.model.Product
+import com.tunahan.ecommerceapp.view.admin.AdminFragmentDirections
+import com.tunahan.ecommerceapp.view.home.HomeFragmentDirections
 
 class HomeProductAdapter(
     private val productList: ArrayList<Product>,
@@ -33,6 +36,10 @@ class HomeProductAdapter(
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val currentProductList = productList[position]
 
+
+        val currentUuid = currentProductList.documentUuid.toString()
+        holder.binding.uuidText.text = currentUuid
+
         holder.binding.productNameTV.text = currentProductList.bookName
         holder.binding.productPriceTV.text = "${currentProductList.price} $"
 
@@ -41,6 +48,11 @@ class HomeProductAdapter(
             .load(currentProductList.downloadUrl)
             .skipMemoryCache(true)//for caching the image url in case phone is offline
             .into(holder.binding.homeProductIV)
+
+        holder.itemView.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToHomeDetailsFragment(currentUuid)
+            Navigation.findNavController(it).navigate(action)
+        }
     }
 
 }
