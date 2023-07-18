@@ -124,14 +124,15 @@ class ProfileFragment : Fragment() {
 
                 if (error != null) {
                     Toast.makeText(requireContext(),error.localizedMessage,Toast.LENGTH_LONG).show()
-                }
+                }else{
+                    if (value != null){
 
-                if (value != null && value.exists()){
-                    val document = value.data
+                        val document = value.data
 
-                    val url = document?.get("downloadUrl") as String?
-                    if (url != null) {
-                        Glide.with(requireContext()).load(url).circleCrop().into(binding.profileIV)
+                        val url = document?.get("downloadUrl") as String?
+                        if (url != null) {
+                            Glide.with(requireContext()).load(url).circleCrop().into(binding.profileIV)
+                        }
                     }
                 }
 

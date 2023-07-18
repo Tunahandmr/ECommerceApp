@@ -92,7 +92,8 @@ class AdminFragment : Fragment() {
                                 publisher,
                                 pageCount,
                                 publicationYear,
-                                language
+                                language,
+                                false
                             )
 
                             productList.add(readProduct)

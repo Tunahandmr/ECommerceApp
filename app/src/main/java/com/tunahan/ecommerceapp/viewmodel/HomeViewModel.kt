@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tunahan.ecommerceapp.model.Document
+import com.tunahan.ecommerceapp.model.Favorite
 import com.tunahan.ecommerceapp.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -13,23 +14,23 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val homeRepository: HomeRepository):ViewModel() {
 
-     val readAllData: LiveData<List<Document>> = homeRepository.readAllData
+     val readAllData: LiveData<List<Favorite>> = homeRepository.readAllData
 
-    fun addNote(document: Document) {
+    fun addNote(favorite: Favorite) {
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.addNote(document)
+            homeRepository.addNote(favorite)
         }
     }
 
-    fun updateDocument(document: Document){
+    fun updateDocument(favorite: Favorite){
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.updateDocument(document)
+            homeRepository.updateDocument(favorite)
         }
     }
 
-    fun deleteNote(document: Document) {
+    fun deleteNote(favorite: Favorite) {
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.deleteNote(document)
+            homeRepository.deleteNote(favorite)
         }
     }
 

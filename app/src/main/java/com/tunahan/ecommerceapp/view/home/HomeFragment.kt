@@ -8,9 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -18,7 +21,9 @@ import com.tunahan.ecommerceapp.R
 import com.tunahan.ecommerceapp.adapter.BookCategoryAdapter
 import com.tunahan.ecommerceapp.adapter.HomeProductAdapter
 import com.tunahan.ecommerceapp.databinding.FragmentHomeBinding
+import com.tunahan.ecommerceapp.model.Favorite
 import com.tunahan.ecommerceapp.model.Product
+import com.tunahan.ecommerceapp.viewmodel.HomeViewModel
 import kotlin.math.log
 
 
@@ -32,14 +37,22 @@ class HomeFragment : Fragment() {
     private val mList = ArrayList<String>()
     private lateinit var bookCategoryAdapter: BookCategoryAdapter
     private var productList = ArrayList<Product>()
+    private var favoriteList = ArrayList<Favorite>()
+
+    private lateinit var mHomeViewModel: HomeViewModel
 
     val db = Firebase.firestore
+    val auth = Firebase.auth
+    val currentUser = auth.currentUser?.uid.toString()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        mHomeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
+
         bookCategoryAdapter =
             BookCategoryAdapter(mList, object : BookCategoryAdapter.OnClickListener {
                 override fun onClick(item: String) {
@@ -55,7 +68,34 @@ class HomeFragment : Fragment() {
 
         val layoutManager = GridLayoutManager(requireContext(), 2)
         binding.homeProductRV.layoutManager = layoutManager
-        homeProductAdapter = HomeProductAdapter(productList, requireContext())
+        homeProductAdapter = HomeProductAdapter(productList,favoriteList, requireContext(),object : HomeProductAdapter.OnClickListener{
+
+
+            override fun onClick(
+                bookUuid: String,
+                bookName: String,
+                imageUrl: String,
+                writer: String,
+                publisher: String,
+                price: String,
+                bool: Boolean
+            ) {
+                if (bool){
+                    val favorites = Favorite(0,bookUuid,bookName,imageUrl,writer, publisher, price)
+                    mHomeViewModel.addNote(favorites)
+                    //favorite write
+                    //favoriteWrite(bookUuid,bool,bookName)
+                    // favoriteWrite(bookUuid,true,bookName)
+                    //addToFavorites(currentUser,bookName)
+                }else{
+
+                    //Toast.makeText(requireContext(),"sil",Toast.LENGTH_LONG).show()
+                }
+            }
+
+
+
+        })
         binding.homeProductRV.adapter = homeProductAdapter
 
         return binding.root
@@ -66,10 +106,23 @@ class HomeFragment : Fragment() {
 
         listAdd()
 
+        mHomeViewModel.readAllData.observe(viewLifecycleOwner, Observer {
+            for (favorites in it){
+                val favList = Favorite(favorites.id,favorites.bookId,favorites.bookName,favorites.imageUrl,favorites.writer,
+                    favorites.publisher,favorites.price)
+                favoriteList.add(favList)
+            }
+
+        })
+
+       // readFavorite()
+
         if (count==0){
             readAllData()
             count++
         }
+
+
 
         binding.cardView.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment())
@@ -77,17 +130,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun readAllData() {
-        db.collection("books").orderBy(
+        db.collection("books")/*.orderBy(
             "date",
             Query.Direction.DESCENDING
-        ).addSnapshotListener { value, error ->
+        )*/.addSnapshotListener { value, error ->
             if (error != null) {
                 Toast.makeText(requireContext(), error.localizedMessage, Toast.LENGTH_LONG).show()
             } else {
                 if (value != null) {
                     if (!value.isEmpty) {
+                        binding.homeProductRV.visibility = View.VISIBLE
+                        binding.warningText.visibility = View.GONE
                         val documents = value.documents
                         productList.clear()
+
                         for (document in documents) {
 
                             val url = document.get("downloadUrl") as String?
@@ -109,13 +165,18 @@ class HomeFragment : Fragment() {
                                 publisher,
                                 pageCount,
                                 publicationYear,
-                                language
+                                language,
+                                true
                             )
 
                             productList.add(readProduct)
+
                         }
 
                         homeProductAdapter.notifyDataSetChanged()
+                    }else{
+                        binding.homeProductRV.visibility = View.GONE
+                        binding.warningText.visibility = View.VISIBLE
                     }
                 }
             }
@@ -126,14 +187,16 @@ class HomeFragment : Fragment() {
         db.collection("books").whereEqualTo("category", categoryFilter)
             .addSnapshotListener { value, error ->
                 if (error != null) {
-                    //Log.d("dizinhata",error.localizedMessage)
                     Toast.makeText(requireContext(), error.localizedMessage, Toast.LENGTH_LONG)
                         .show()
                 } else {
                     if (value != null) {
                         if (!value.isEmpty) {
+                            binding.homeProductRV.visibility = View.VISIBLE
+                            binding.warningText.visibility = View.GONE
                             val documents = value.documents
                             productList.clear()
+
                             for (document in documents) {
 
                                 val url = document.get("downloadUrl") as String?
@@ -155,13 +218,17 @@ class HomeFragment : Fragment() {
                                     publisher,
                                     pageCount,
                                     publicationYear,
-                                    language
+                                    language,
+                                    true
                                 )
 
                                 productList.add(readProduct)
                             }
 
                             homeProductAdapter.notifyDataSetChanged()
+                        }else{
+                            binding.homeProductRV.visibility = View.GONE
+                            binding.warningText.visibility = View.VISIBLE
                         }
                     }
                 }

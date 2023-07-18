@@ -138,6 +138,7 @@ class AdminAddFragment : Fragment() {
                     addMap["category"] = category
                     addMap["downloadUrl"] = dowloadUrl
                     addMap["bookUuid"] = bookUuid.toString()
+                    addMap["bool"] = false
 
 
 

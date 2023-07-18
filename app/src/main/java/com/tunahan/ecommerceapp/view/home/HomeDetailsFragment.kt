@@ -26,6 +26,7 @@ class HomeDetailsFragment : Fragment() {
 
     private val args by navArgs<HomeDetailsFragmentArgs>()
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,7 +40,12 @@ class HomeDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.backButton.setOnClickListener {
-            findNavController().navigate(HomeDetailsFragmentDirections.actionHomeDetailsFragmentToHomeFragment())
+            if (args.actionCount==1){
+                findNavController().navigate(HomeDetailsFragmentDirections.actionHomeDetailsFragmentToHomeFragment())
+            }else{
+                findNavController().navigate(HomeDetailsFragmentDirections.actionHomeDetailsFragmentToFavoriteFragment())
+            }
+
         }
 
         readData(args.bookUuid)

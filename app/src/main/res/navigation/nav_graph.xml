@@ -90,7 +90,11 @@
         android:id="@+id/favoriteFragment"
         android:name="com.tunahan.ecommerceapp.view.favorite.FavoriteFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_homeDetailsFragment"
+            app:destination="@id/homeDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.tunahan.ecommerceapp.view.profile.ProfileFragment"
@@ -144,5 +148,11 @@
         <argument
             android:name="bookUuid"
             app:argType="string" />
+        <argument
+            android:name="actionCount"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_homeDetailsFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
     </fragment>
 </navigation>

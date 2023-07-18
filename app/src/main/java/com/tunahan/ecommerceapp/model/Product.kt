@@ -1,7 +1,7 @@
 package com.tunahan.ecommerceapp.model
 
 data class Product(
-    var documentUuid:String?,
+    var documentUuid: String?,
     var downloadUrl: String?,
     var bookName: String?,
     var price: String?,
@@ -9,4 +9,6 @@ data class Product(
     var publisher: String?,
     var pageCount: String?,
     var publicationYear: String?,
-    var language: String?)
+    var language: String?,
+    var isFavorite: Boolean?
+)

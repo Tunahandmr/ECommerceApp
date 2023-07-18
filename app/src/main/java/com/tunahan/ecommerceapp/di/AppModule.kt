@@ -2,7 +2,7 @@ package com.tunahan.ecommerceapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.tunahan.ecommerceapp.room.DocumentDatabase
+import com.tunahan.ecommerceapp.room.FavoriteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,9 +17,9 @@ object AppModule {
     @Singleton
     @Provides
     fun injectRoomDatabase(@ApplicationContext context: Context) =
-        Room.databaseBuilder(context,DocumentDatabase::class.java,"documentDB").build()
+        Room.databaseBuilder(context,FavoriteDatabase::class.java,"favoriteDB").build()
 
     @Singleton
     @Provides
-    fun injectDao(database:DocumentDatabase)=database.documentDao()
+    fun injectDao(database:FavoriteDatabase)=database.favoriteDao()
 }
