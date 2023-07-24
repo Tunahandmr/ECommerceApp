@@ -6,15 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.tunahan.ecommerceapp.R
+import com.tunahan.ecommerceapp.adapter.FavoriteAdapter
 import com.tunahan.ecommerceapp.databinding.FragmentHomeDetailsBinding
+import com.tunahan.ecommerceapp.model.Favorite
 import com.tunahan.ecommerceapp.model.Product
 import com.tunahan.ecommerceapp.view.admin.AdminUpdateFragmentArgs
+import com.tunahan.ecommerceapp.viewmodel.HomeViewModel
 
 class HomeDetailsFragment : Fragment() {
 
@@ -22,9 +30,22 @@ class HomeDetailsFragment : Fragment() {
     private val binding get() = _binding!!
 
     val db = Firebase.firestore
+    val auth = Firebase.auth
     var myCategory = ""
 
     private val args by navArgs<HomeDetailsFragmentArgs>()
+    private lateinit var mHomeViewModel: HomeViewModel
+    private var favoriteList = ArrayList<Favorite>()
+    private lateinit var favoriteAdapter:FavoriteAdapter
+
+    var url: String? = null
+    var bookName: String? = null
+    var price: String? = null
+    var writer: String? = null
+    var publisher: String? = null
+    var favoriteId:Int?=null
+
+    private var favoriteBool:Boolean?=null
 
 
     override fun onCreateView(
@@ -33,6 +54,7 @@ class HomeDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeDetailsBinding.inflate(inflater, container, false)
+        mHomeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         return binding.root
     }
 
@@ -40,29 +62,71 @@ class HomeDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.backButton.setOnClickListener {
-            if (args.actionCount==1){
+            if (args.actionCount == 1) {
                 findNavController().navigate(HomeDetailsFragmentDirections.actionHomeDetailsFragmentToHomeFragment())
-            }else{
+            } else {
                 findNavController().navigate(HomeDetailsFragmentDirections.actionHomeDetailsFragmentToFavoriteFragment())
             }
 
         }
 
+        mHomeViewModel.readAllData.observe(viewLifecycleOwner, Observer {
+            for (favorites in it) {
+                favoriteList.add(favorites)
+                if (args.bookUuid == favorites.bookId) {
+                    favoriteId = favorites.id
+                    binding.favoriteButton.setImageResource(R.drawable.ic_favorite)
+                    //binding.favoriteButton.isClickable = false
+                }
+            }
+        })
+
+        readFavorite()
+
+        binding.favoriteButton.setOnClickListener {
+
+            if (favoriteBool!=null){
+
+                if (favoriteBool==true){
+                    //sil
+                    updateFavorite()
+                    deleteFavorites()
+
+                }else{
+                    addFavorite()
+                    val favorites =
+                        Favorite(0, args.bookUuid, bookName!!, url!!, writer!!, publisher!!, price!!)
+                    mHomeViewModel.addNote(favorites)
+                }
+
+            }else{
+                addFavorite()
+                val favorites =
+                    Favorite(0, args.bookUuid, bookName!!, url!!, writer!!, publisher!!, price!!)
+                mHomeViewModel.addNote(favorites)
+            }
+
+            /*val favorites =
+                Favorite(0, args.bookUuid, bookName!!, url!!, writer!!, publisher!!, price!!)
+            mHomeViewModel.addNote(favorites)*/
+        }
+
+
         readData(args.bookUuid)
     }
 
 
-    private fun readData(documentId:String) {
+    private fun readData(documentId: String) {
         db.collection("books").document(documentId).get().addOnSuccessListener { task ->
             if (task != null) {
 
                 val document = task.data
 
-                val url = document?.get("downloadUrl") as String?
-                val bookName = document?.get("bookName") as String?
-                val price = document?.get("price") as String?
-                val writer = document?.get("writer") as String?
-                val publisher = document?.get("publisher") as String?
+                url = document?.get("downloadUrl") as String?
+                bookName = document?.get("bookName") as String?
+                price = document?.get("price") as String?
+                writer = document?.get("writer") as String?
+                publisher = document?.get("publisher") as String?
                 val pageCount = document?.get("pageCount") as String?
                 val publicationYear = document?.get("publicationYear") as String?
                 val language = document?.get("language") as String?
@@ -83,7 +147,7 @@ class HomeDetailsFragment : Fragment() {
                 }
 
                 binding.bookNameText.text = bookName
-                binding.priceText.text  = "${price} $"
+                binding.priceText.text = "${price} $"
                 binding.writerNameText.text = writer
                 binding.publisherText.text = publisher
                 binding.pageCountText.text = pageCount
@@ -94,9 +158,77 @@ class HomeDetailsFragment : Fragment() {
 
                 Glide.with(requireContext()).load(url).into(binding.bookImage)
             }
+        }.addOnFailureListener { exception ->
+            Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun readFavorite() {
+        val userId = auth.currentUser?.uid.toString()
+        val bookId = args.bookUuid
+        val docRef =
+            db.collection("favorites").document(userId).collection("favorite").document(bookId)
+        docRef.addSnapshotListener { value, error ->
+
+            if (error!=null){
+                Toast.makeText(requireContext(),error.localizedMessage,Toast.LENGTH_LONG).show()
+            }else{
+                if (value!=null){
+                    val data = value.data
+
+                    favoriteBool = data?.get("favoriteBool") as Boolean?
+
+                }
+            }
+        }
+
+    }
+
+    private fun addFavorite(){
+
+        val userId = auth.currentUser?.uid.toString()
+        val bookId = args.bookUuid
+
+        val addMap = hashMapOf<String, Any>()
+
+        addMap["favoriteBool"] = true
+
+        db.collection("favorites").document(userId).collection("favorite").document(bookId).
+                set(addMap).addOnCompleteListener { task->
+            if (task.isSuccessful){
+                Toast.makeText(requireContext(),"Add to favorites successful!",Toast.LENGTH_LONG).show()
+            }
         }.addOnFailureListener { exception->
             Toast.makeText(requireContext(),exception.localizedMessage,Toast.LENGTH_LONG).show()
         }
+
+    }
+
+    private fun updateFavorite(){
+
+        val userId = auth.currentUser?.uid.toString()
+        val bookId = args.bookUuid
+
+        val addMap = hashMapOf<String, Any>()
+
+        addMap["favoriteBool"] = false
+
+        db.collection("favorites").document(userId).collection("favorite").document(bookId).
+        update(addMap).addOnCompleteListener { task->
+            if (task.isSuccessful){
+                Toast.makeText(requireContext(),"Delete to favorites successful!",Toast.LENGTH_LONG).show()
+            }
+        }.addOnFailureListener { exception->
+            Toast.makeText(requireContext(),exception.localizedMessage,Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+
+    private fun deleteFavorites(){
+        val favorites =
+            favoriteId?.let { Favorite(it, args.bookUuid, bookName!!, url!!, writer!!, publisher!!, price!!) }
+        favorites?.let { mHomeViewModel.deleteNote(it) }
     }
 
     override fun onDestroyView() {

@@ -3,7 +3,6 @@ package com.tunahan.ecommerceapp.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tunahan.ecommerceapp.model.Document
 import com.tunahan.ecommerceapp.model.Favorite
 import com.tunahan.ecommerceapp.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,5 +32,6 @@ class HomeViewModel @Inject constructor(private val homeRepository: HomeReposito
             homeRepository.deleteNote(favorite)
         }
     }
+
 
 }

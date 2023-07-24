@@ -14,7 +14,7 @@ class BookCategoryAdapter(private val categoryList: ArrayList<String>,
 private val onClickEvent:OnClickListener) :
     RecyclerView.Adapter<BookCategoryAdapter.MyViewHolder>() {
 
-    private var selectItem: Int? = 0
+    private var selectItem: Int? = null
 
     interface OnClickListener{
         fun onClick(item:String)

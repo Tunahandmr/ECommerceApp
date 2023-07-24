@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.tunahan.ecommerceapp.databinding.RecyclerAdminRowBinding
+import com.tunahan.ecommerceapp.databinding.SearchRowBinding
 import com.tunahan.ecommerceapp.model.Product
 import com.tunahan.ecommerceapp.view.admin.AdminFragmentDirections
 
@@ -15,10 +15,10 @@ class AdminAdapter(
     private val context:Context
 ) : RecyclerView.Adapter<AdminAdapter.AdminViewHolder>() {
 
-    class AdminViewHolder(val binding: RecyclerAdminRowBinding) : RecyclerView.ViewHolder(binding.root)
+    class AdminViewHolder(val binding: SearchRowBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdminViewHolder {
-        val view =RecyclerAdminRowBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val view =SearchRowBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return AdminViewHolder(view)
     }
 
@@ -32,7 +32,8 @@ class AdminAdapter(
         val currentUuid = currentList.documentUuid.toString()
         holder.binding.uuidText.text = currentUuid
         holder.binding.bookNameText.text = currentList.bookName
-        holder.binding.priceText.text = "${currentList.price} $"
+        holder.binding.publisherText.text = currentList.publisher
+        holder.binding.priceText.text = "${currentList.price} ₺"
         Glide.with(context)
             .load(currentList.downloadUrl)
             .skipMemoryCache(true)//for caching the image url in case phone is offline

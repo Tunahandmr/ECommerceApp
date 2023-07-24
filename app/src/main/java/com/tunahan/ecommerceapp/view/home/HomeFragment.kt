@@ -68,34 +68,7 @@ class HomeFragment : Fragment() {
 
         val layoutManager = GridLayoutManager(requireContext(), 2)
         binding.homeProductRV.layoutManager = layoutManager
-        homeProductAdapter = HomeProductAdapter(productList,favoriteList, requireContext(),object : HomeProductAdapter.OnClickListener{
-
-
-            override fun onClick(
-                bookUuid: String,
-                bookName: String,
-                imageUrl: String,
-                writer: String,
-                publisher: String,
-                price: String,
-                bool: Boolean
-            ) {
-                if (bool){
-                    val favorites = Favorite(0,bookUuid,bookName,imageUrl,writer, publisher, price)
-                    mHomeViewModel.addNote(favorites)
-                    //favorite write
-                    //favoriteWrite(bookUuid,bool,bookName)
-                    // favoriteWrite(bookUuid,true,bookName)
-                    //addToFavorites(currentUser,bookName)
-                }else{
-
-                    //Toast.makeText(requireContext(),"sil",Toast.LENGTH_LONG).show()
-                }
-            }
-
-
-
-        })
+        homeProductAdapter = HomeProductAdapter(productList, requireContext())
         binding.homeProductRV.adapter = homeProductAdapter
 
         return binding.root

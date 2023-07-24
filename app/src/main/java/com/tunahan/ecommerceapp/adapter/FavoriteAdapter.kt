@@ -52,7 +52,7 @@ class FavoriteAdapter(
         holder.binding.favoriteBookName.text = currentFavorite.bookName
         holder.binding.favoriteWriter.text = currentFavorite.writer
         holder.binding.favoritePublisher.text = currentFavorite.publisher
-        holder.binding.favoritePrice.text = "${currentFavorite.price} $"
+        holder.binding.favoritePrice.text = "${currentFavorite.price} ₺"
 
         Glide.with(context).load(currentFavorite.imageUrl).skipMemoryCache(true).into(holder.binding.favoriteImageView)
 

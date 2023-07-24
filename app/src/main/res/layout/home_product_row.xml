@@ -21,12 +21,6 @@
             android:text="uuid"
             android:visibility="gone"
             android:textSize="20sp" />
-        <ImageView
-            android:id="@+id/favoriteIV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_favorite_border"
-            android:layout_gravity="end"/>
 
         <ImageView
             android:id="@+id/homeProductIV"
@@ -50,7 +44,7 @@
             android:id="@+id/productPriceTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="250 Tl"
+            android:text="250 ₺"
             android:textAlignment="center"
             android:textSize="24sp"
             />

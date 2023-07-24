@@ -25,21 +25,8 @@ import kotlinx.android.synthetic.main.category_row.view.categoryText
 
 class HomeProductAdapter(
     private val productList: ArrayList<Product>,
-    private val favoriteList: ArrayList<Favorite>,
     private val context: Context,
-    private val onClickEvent: OnClickListener
 ) : RecyclerView.Adapter<HomeProductAdapter.ProductViewHolder>() {
-
-
-    private var selectItem: Int? = null
-
-    interface OnClickListener {
-        fun onClick(
-            bookUuid: String, bookName: String, imageUrl: String, writer: String, publisher: String,
-            price: String, bool: Boolean
-        )
-
-    }
 
     class ProductViewHolder(val binding: HomeProductRowBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -56,38 +43,11 @@ class HomeProductAdapter(
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val currentProductList = productList[position]
 
-        for (favorites in favoriteList){
-            val favoriteId = favorites.bookId
-            if (currentProductList.documentUuid == favoriteId) {
-                holder.binding.favoriteIV.setImageResource(R.drawable.ic_favorite)
-                holder.binding.favoriteIV.visibility = View.INVISIBLE
-            }
-        }
-
-        holder.binding.favoriteIV.setOnClickListener {
-            val uid = currentProductList.documentUuid.toString()
-            val bookName = currentProductList.bookName.toString()
-            val imageUrl = currentProductList.downloadUrl.toString()
-            val writer = currentProductList.writer.toString()
-            val publisher = currentProductList.publisher.toString()
-            val price = currentProductList.price.toString()
-            val bool = currentProductList.isFavorite
-            selectItem = position
-            onClickEvent.onClick(uid,bookName,imageUrl,writer,publisher,price,bool!!)
-
-            notifyDataSetChanged()
-        }
-
-        if (selectItem == position) {
-            holder.binding.favoriteIV.setImageResource(R.drawable.ic_favorite)
-        }
-
-
         val currentUuid = currentProductList.documentUuid.toString()
         holder.binding.uuidText.text = currentUuid
 
         holder.binding.productNameTV.text = currentProductList.bookName
-        holder.binding.productPriceTV.text = "${currentProductList.price} $"
+        holder.binding.productPriceTV.text = "${currentProductList.price} ₺"
 
         Glide.with(context)
             .load(currentProductList.downloadUrl)
