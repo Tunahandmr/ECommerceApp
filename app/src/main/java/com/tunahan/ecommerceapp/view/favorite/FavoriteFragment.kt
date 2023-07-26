@@ -19,6 +19,7 @@ import com.tunahan.ecommerceapp.adapter.FavoriteAdapter
 import com.tunahan.ecommerceapp.adapter.HomeProductAdapter
 import com.tunahan.ecommerceapp.databinding.FragmentFavoriteBinding
 import com.tunahan.ecommerceapp.model.Favorite
+import com.tunahan.ecommerceapp.util.SwipeToDeleteCallback
 import com.tunahan.ecommerceapp.viewmodel.HomeViewModel
 
 
@@ -27,31 +28,12 @@ class FavoriteFragment : Fragment() {
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
 
-    private var favoriteList = ArrayList<Favorite>()
-    private lateinit var favoriteAdapter: FavoriteAdapter
+    private val favoriteAdapter by lazy { FavoriteAdapter(requireContext()) }
 
     private lateinit var mHomeViewModel: HomeViewModel
 
-    val db = Firebase.firestore
-    val auth = Firebase.auth
-    val currentUser = auth.currentUser?.uid.toString()
 
-    private val swipeCallback = object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT){
-        override fun onMove(
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder,
-            target: RecyclerView.ViewHolder
-        ): Boolean {
-            return true
-        }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            val layoutPosition = viewHolder.layoutPosition
-            val selectedArt = favoriteAdapter.favorites[layoutPosition]
-            mHomeViewModel.deleteNote(selectedArt)
-        }
-
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,49 +43,37 @@ class FavoriteFragment : Fragment() {
 
         mHomeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
 
-        val layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView.layoutManager = layoutManager
-        favoriteAdapter = FavoriteAdapter(requireContext())
-        binding.recyclerView.adapter = favoriteAdapter
+       // favoriteAdapter = FavoriteAdapter(requireContext())
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mHomeViewModel.readAllData.observe(viewLifecycleOwner, Observer {
-            for (favorites in it){
-                val favList = Favorite(favorites.id,favorites.bookId,favorites.bookName,favorites.imageUrl,favorites.writer,
-                favorites.publisher,favorites.price)
-                favoriteList.add(favList)
-            }
-
+        mHomeViewModel.readAllFavorite.observe(viewLifecycleOwner, Observer {
+            favoriteAdapter.setData(it)
+            binding.recyclerView.adapter = favoriteAdapter
         })
 
-        favoriteAdapter.setData(favoriteList)
-        ItemTouchHelper(swipeCallback).attachToRecyclerView(binding.recyclerView)
-
-     //   getFavorites(currentUser)
+        swipeToDelete()
 
     }
 
-    fun getFavorites(userId: String) {
-        val favoritesCollection = db.collection("favorites")
+    private fun swipeToDelete() {
 
-        favoritesCollection.whereEqualTo("userId", userId)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                for (document in querySnapshot) {
-                    val productId = document.getString("userId")
-                    val productName = document.getString("productName")
-                    // Diğer alanları alın
-                 //   val fav = Favorite(0,productName!!,false)
-                    //favoriteList.add(fav)
-                }
+        val swipeCallback = object : SwipeToDeleteCallback() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.layoutPosition
+                val selectedFavorites = favoriteAdapter.favorites[position]
+                mHomeViewModel.deleteFavorite(selectedFavorites)
+                favoriteAdapter.notifyItemRemoved(position)
             }
-            .addOnFailureListener { e ->
-                println("Favori ürünleri alırken hata oluştu: $e")
-            }
+
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipeCallback)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
     override fun onDestroyView() {

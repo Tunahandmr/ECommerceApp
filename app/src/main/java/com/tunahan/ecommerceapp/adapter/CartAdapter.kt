@@ -17,7 +17,7 @@ class CartAdapter(private val context: Context) :
 
     private val diffUtil = object : DiffUtil.ItemCallback<Cart>() {
         override fun areItemsTheSame(oldItem: Cart, newItem: Cart): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: Cart, newItem: Cart): Boolean {
@@ -47,14 +47,14 @@ class CartAdapter(private val context: Context) :
         holder.binding.bookIdCart.text = currentCart.bookId
         holder.binding.bookNameCart.text = currentCart.bookName
         holder.binding.writerCart.text = currentCart.writer
-        holder.binding.priceCart.text = currentCart.price
+        holder.binding.priceCart.text = "${ currentCart.price } ₺"
 
         Glide.with(context).load(currentCart.imageUrl).into(holder.binding.cartIV)
     }
 
-    fun setData(cartList: ArrayList<Cart>) {
+    fun setData(cartList: List<Cart>) {
         carts = cartList
-        notifyDataSetChanged()
+        notifyItemRangeInserted(0,cartList.size)
     }
 
 }

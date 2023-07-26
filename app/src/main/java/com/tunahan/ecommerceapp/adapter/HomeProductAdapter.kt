@@ -31,6 +31,11 @@ class HomeProductAdapter(
     class ProductViewHolder(val binding: HomeProductRowBinding) :
         RecyclerView.ViewHolder(binding.root)
 
+
+    var addClick: (String,String,String,String,String) -> Unit = {id,name,url,writer,price->
+
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val view = HomeProductRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ProductViewHolder(view)
@@ -53,6 +58,11 @@ class HomeProductAdapter(
             .load(currentProductList.downloadUrl)
             .skipMemoryCache(true)//for caching the image url in case phone is offline
             .into(holder.binding.homeProductIV)
+
+        holder.binding.addCartTV.setOnClickListener {
+            addClick(currentUuid,currentProductList.bookName.toString(),currentProductList.downloadUrl.toString(),
+                currentProductList.writer.toString(),currentProductList.price.toString())
+        }
 
         holder.itemView.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToHomeDetailsFragment(currentUuid,1)

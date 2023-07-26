@@ -3,6 +3,7 @@ package com.tunahan.ecommerceapp.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tunahan.ecommerceapp.model.Cart
 import com.tunahan.ecommerceapp.model.Favorite
 import com.tunahan.ecommerceapp.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,25 +12,44 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val homeRepository: HomeRepository):ViewModel() {
+class HomeViewModel @Inject constructor(private val homeRepository: HomeRepository) : ViewModel() {
 
-     val readAllData: LiveData<List<Favorite>> = homeRepository.readAllData
+    val readAllFavorite: LiveData<List<Favorite>> = homeRepository.readAllFavorite
+    val readAllCart: LiveData<List<Cart>> = homeRepository.readAllCart
 
-    fun addNote(favorite: Favorite) {
+    fun addFavorite(favorite: Favorite) {
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.addNote(favorite)
+            homeRepository.addFavorite(favorite)
         }
     }
 
-    fun updateDocument(favorite: Favorite){
+    fun updateFavorite(favorite: Favorite) {
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.updateDocument(favorite)
+            homeRepository.updateFavorite(favorite)
         }
     }
 
-    fun deleteNote(favorite: Favorite) {
+    fun deleteFavorite(favorite: Favorite) {
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.deleteNote(favorite)
+            homeRepository.deleteFavorite(favorite)
+        }
+    }
+
+    fun addCart(cart: Cart) {
+        viewModelScope.launch(Dispatchers.IO) {
+            homeRepository.addCart(cart)
+        }
+    }
+
+    fun updateCart(cart: Cart) {
+        viewModelScope.launch(Dispatchers.IO) {
+            homeRepository.updateCart(cart)
+        }
+    }
+
+    fun deleteCart(cart: Cart) {
+        viewModelScope.launch(Dispatchers.IO) {
+            homeRepository.deleteCart(cart)
         }
     }
 

@@ -70,7 +70,7 @@ class HomeDetailsFragment : Fragment() {
 
         }
 
-        mHomeViewModel.readAllData.observe(viewLifecycleOwner, Observer {
+        mHomeViewModel.readAllFavorite.observe(viewLifecycleOwner, Observer {
             for (favorites in it) {
                 favoriteList.add(favorites)
                 if (args.bookUuid == favorites.bookId) {
@@ -96,14 +96,14 @@ class HomeDetailsFragment : Fragment() {
                     addFavorite()
                     val favorites =
                         Favorite(0, args.bookUuid, bookName!!, url!!, writer!!, publisher!!, price!!)
-                    mHomeViewModel.addNote(favorites)
+                    mHomeViewModel.addFavorite(favorites)
                 }
 
             }else{
                 addFavorite()
                 val favorites =
                     Favorite(0, args.bookUuid, bookName!!, url!!, writer!!, publisher!!, price!!)
-                mHomeViewModel.addNote(favorites)
+                mHomeViewModel.addFavorite(favorites)
             }
 
             /*val favorites =
@@ -228,7 +228,7 @@ class HomeDetailsFragment : Fragment() {
     private fun deleteFavorites(){
         val favorites =
             favoriteId?.let { Favorite(it, args.bookUuid, bookName!!, url!!, writer!!, publisher!!, price!!) }
-        favorites?.let { mHomeViewModel.deleteNote(it) }
+        favorites?.let { mHomeViewModel.deleteFavorite(it) }
     }
 
     override fun onDestroyView() {

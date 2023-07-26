@@ -22,7 +22,7 @@ class FavoriteAdapter(
 
     private val diffUtil = object : DiffUtil.ItemCallback<Favorite>() {
         override fun areItemsTheSame(oldItem: Favorite, newItem: Favorite): Boolean {
-            return oldItem == newItem
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Favorite, newItem: Favorite): Boolean {
@@ -54,19 +54,22 @@ class FavoriteAdapter(
         holder.binding.favoritePublisher.text = currentFavorite.publisher
         holder.binding.favoritePrice.text = "${currentFavorite.price} ₺"
 
-        Glide.with(context).load(currentFavorite.imageUrl).skipMemoryCache(true).into(holder.binding.favoriteImageView)
+        Glide.with(context).load(currentFavorite.imageUrl).skipMemoryCache(true)
+            .into(holder.binding.favoriteImageView)
 
         holder.itemView.setOnClickListener {
-            val action = FavoriteFragmentDirections.actionFavoriteFragmentToHomeDetailsFragment(currentFavorite.bookId,2)
+            val action = FavoriteFragmentDirections.actionFavoriteFragmentToHomeDetailsFragment(
+                currentFavorite.bookId,
+                2
+            )
             Navigation.findNavController(it).navigate(action)
         }
 
     }
 
-
-    fun setData(favorite:ArrayList<Favorite>){
-        favorites=favorite
-        notifyDataSetChanged()
+    fun setData(favorite: List<Favorite>) {
+        favorites = favorite
+        notifyItemRangeInserted(0, favorite.size)
     }
 
 

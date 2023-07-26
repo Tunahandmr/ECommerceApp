@@ -2,6 +2,7 @@ package com.tunahan.ecommerceapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.tunahan.ecommerceapp.room.CartDatabase
 import com.tunahan.ecommerceapp.room.FavoriteDatabase
 import dagger.Module
 import dagger.Provides
@@ -16,10 +17,19 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun injectRoomDatabase(@ApplicationContext context: Context) =
+    fun injectFavoriteDatabase(@ApplicationContext context: Context) =
         Room.databaseBuilder(context,FavoriteDatabase::class.java,"favoriteDB").build()
 
     @Singleton
     @Provides
-    fun injectDao(database:FavoriteDatabase)=database.favoriteDao()
+    fun injectFavoriteDao(database:FavoriteDatabase)=database.favoriteDao()
+
+    @Singleton
+    @Provides
+    fun injectCartDatabase(@ApplicationContext context: Context)=
+        Room.databaseBuilder(context,CartDatabase::class.java, name = "cartDB").build()
+
+    @Singleton
+    @Provides
+    fun injectCartDao(database:CartDatabase)=database.cartDao()
 }

@@ -307,6 +307,7 @@ class AdminAddFragment : Fragment() {
 
 
     private fun listAdd() {
+        mList.add("")
         mList.add("Classics")
         mList.add("Fantasy")
         mList.add("Horror")

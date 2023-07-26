@@ -1,8 +1,7 @@
 package com.tunahan.ecommerceapp.model
 
-import kotlinx.serialization.Serializable
 
-@Serializable
+
 data class Product(
     var documentUuid: String?,
     var downloadUrl: String?,

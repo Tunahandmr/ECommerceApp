@@ -21,6 +21,7 @@ import com.tunahan.ecommerceapp.R
 import com.tunahan.ecommerceapp.adapter.BookCategoryAdapter
 import com.tunahan.ecommerceapp.adapter.HomeProductAdapter
 import com.tunahan.ecommerceapp.databinding.FragmentHomeBinding
+import com.tunahan.ecommerceapp.model.Cart
 import com.tunahan.ecommerceapp.model.Favorite
 import com.tunahan.ecommerceapp.model.Product
 import com.tunahan.ecommerceapp.viewmodel.HomeViewModel
@@ -79,18 +80,29 @@ class HomeFragment : Fragment() {
 
         listAdd()
 
-        mHomeViewModel.readAllData.observe(viewLifecycleOwner, Observer {
-            for (favorites in it){
-                val favList = Favorite(favorites.id,favorites.bookId,favorites.bookName,favorites.imageUrl,favorites.writer,
-                    favorites.publisher,favorites.price)
+        mHomeViewModel.readAllFavorite.observe(viewLifecycleOwner, Observer {
+            for (favorites in it) {
+                val favList = Favorite(
+                    favorites.id,
+                    favorites.bookId,
+                    favorites.bookName,
+                    favorites.imageUrl,
+                    favorites.writer,
+                    favorites.publisher,
+                    favorites.price
+                )
                 favoriteList.add(favList)
             }
 
         })
 
-       // readFavorite()
+        homeProductAdapter.addClick = { id, name, url, writer, price ->
+            val carts = Cart(0, id, name, url, writer, price, 1)
+            mHomeViewModel.addCart(carts)
+        }
+        // readFavorite()
 
-        if (count==0){
+        if (count == 0) {
             readAllData()
             count++
         }
@@ -147,7 +159,7 @@ class HomeFragment : Fragment() {
                         }
 
                         homeProductAdapter.notifyDataSetChanged()
-                    }else{
+                    } else {
                         binding.homeProductRV.visibility = View.GONE
                         binding.warningText.visibility = View.VISIBLE
                     }
@@ -199,7 +211,7 @@ class HomeFragment : Fragment() {
                             }
 
                             homeProductAdapter.notifyDataSetChanged()
-                        }else{
+                        } else {
                             binding.homeProductRV.visibility = View.GONE
                             binding.warningText.visibility = View.VISIBLE
                         }
