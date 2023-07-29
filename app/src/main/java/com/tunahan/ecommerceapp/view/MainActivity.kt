@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
 
             when (destination.id) {
+                R.id.paymentSuccessFragment,
+                R.id.paymentFragment,
                 R.id.homeDetailsFragment,
                 R.id.searchFragment,
                 R.id.updatePasswordFragment,

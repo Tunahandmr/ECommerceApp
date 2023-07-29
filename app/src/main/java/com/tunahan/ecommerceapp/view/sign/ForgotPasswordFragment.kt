@@ -36,7 +36,7 @@ class ForgotPasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.sentButton.setOnClickListener {
-            val email = binding.email.text.toString()
+            val email = binding.emailET.text.toString()
             Firebase.auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -52,6 +52,10 @@ class ForgotPasswordFragment : Fragment() {
                     Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG)
                         .show()
                 }
+        }
+
+        binding.backButton.setOnClickListener {
+            findNavController().navigate(ForgotPasswordFragmentDirections.actionForgotPasswordFragmentToSignInFragment())
         }
     }
 

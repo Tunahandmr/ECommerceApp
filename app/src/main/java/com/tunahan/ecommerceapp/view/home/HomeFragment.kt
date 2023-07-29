@@ -107,8 +107,6 @@ class HomeFragment : Fragment() {
             count++
         }
 
-
-
         binding.cardView.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment())
         }

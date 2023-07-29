@@ -49,19 +49,13 @@
             android:textSize="24sp"
             />
 
-
-            <TextView
-                android:id="@+id/addCartTV"
-                android:layout_marginTop="8dp"
-                android:padding="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add cart"
-                android:background="@drawable/custom_book"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                />
-
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addCartButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Add Cart"
+            style="?attr/materialButtonOutlinedStyle"/>
 
 
     </LinearLayout>

@@ -23,4 +23,7 @@ interface CartDao {
 
     @Query("SELECT * FROM cart_tables ORDER BY id ASC")
     fun readAllCart(): LiveData<List<Cart>>
+
+    @Query("DELETE FROM cart_tables")
+    fun deleteAllCarts()
 }

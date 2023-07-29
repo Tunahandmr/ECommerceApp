@@ -13,6 +13,14 @@ import com.tunahan.ecommerceapp.model.Cart
 class CartAdapter(private val context: Context) :
     RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
+    var onIncreaseClick: (Int, Int, Int, String, String, String, String) -> Unit =
+        { id, price, piece, bId, bName, url, wrt -> }
+
+    var onDecreaseClick: (Int, Int, Int, String, String, String, String) -> Unit =
+        { id, price, piece, bId, bName, url, wrt -> }
+
+    var onDeleteClick: (Int) -> Unit = {}
+
     class CartViewHolder(val binding: CartRowBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val diffUtil = object : DiffUtil.ItemCallback<Cart>() {
@@ -26,7 +34,6 @@ class CartAdapter(private val context: Context) :
     }
 
     private val recyclerListDiffer = AsyncListDiffer(this, diffUtil)
-
 
     var carts: List<Cart>
         get() = recyclerListDiffer.currentList
@@ -47,14 +54,50 @@ class CartAdapter(private val context: Context) :
         holder.binding.bookIdCart.text = currentCart.bookId
         holder.binding.bookNameCart.text = currentCart.bookName
         holder.binding.writerCart.text = currentCart.writer
-        holder.binding.priceCart.text = "${ currentCart.price } ₺"
+        holder.binding.priceCart.text = "${currentCart.price} ₺"
+        holder.binding.pieceCart.text = currentCart.piece.toString()
 
         Glide.with(context).load(currentCart.imageUrl).into(holder.binding.cartIV)
+
+        var productCount = currentCart.piece
+
+        holder.binding.plusCart.setOnClickListener {
+            productCount++
+            onIncreaseClick(
+                currentCart.id,
+                currentCart.price.toInt(),
+                productCount,
+                currentCart.bookId,
+                currentCart.bookName,
+                currentCart.imageUrl,
+                currentCart.writer
+            )
+
+        }
+
+        holder.binding.minusCart.setOnClickListener {
+            if (productCount == 1) {
+                //delete
+                onDeleteClick(currentCart.id)
+            } else {
+                productCount--
+                onDecreaseClick(
+                    currentCart.id,
+                    currentCart.price.toInt(),
+                    productCount,
+                    currentCart.bookId,
+                    currentCart.bookName,
+                    currentCart.imageUrl,
+                    currentCart.writer
+                )
+            }
+
+        }
     }
 
     fun setData(cartList: List<Cart>) {
         carts = cartList
-        notifyItemRangeInserted(0,cartList.size)
+        notifyItemRangeInserted(0, cartList.size)
     }
 
 }

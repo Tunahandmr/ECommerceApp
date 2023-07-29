@@ -53,5 +53,11 @@ class HomeViewModel @Inject constructor(private val homeRepository: HomeReposito
         }
     }
 
+    fun deleteAllCarts(){
+        viewModelScope.launch(Dispatchers.IO){
+            homeRepository.deleteAllCarts()
+        }
+    }
+
 
 }

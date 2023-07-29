@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Total: 10 ₺"
+        android:text="Total: 0 ₺"
         android:textAlignment="center"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -19,27 +19,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/orderNowButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        app:cardBackgroundColor="@color/blue_700"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="5dp"
+        android:text="Order Now"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="Order now"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="25sp" />
-    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartRV"

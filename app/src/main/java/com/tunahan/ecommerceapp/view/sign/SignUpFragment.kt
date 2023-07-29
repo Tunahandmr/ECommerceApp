@@ -39,9 +39,9 @@ class SignUpFragment : Fragment() {
         // Initialize Firebase Auth
         auth = Firebase.auth
         binding.signupButton.setOnClickListener {
-            val email = binding.email.text.toString()
-            val password = binding.password.text.toString()
-            val username = binding.fullname.text.toString()
+            val email = binding.emailET.text.toString()
+            val password = binding.passwordET.text.toString()
+            val username = binding.fullNameET.text.toString()
 
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -64,6 +64,10 @@ class SignUpFragment : Fragment() {
                 Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG)
                     .show()
             }
+        }
+
+        binding.backButton.setOnClickListener {
+            findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToSignInFragment())
         }
     }
 

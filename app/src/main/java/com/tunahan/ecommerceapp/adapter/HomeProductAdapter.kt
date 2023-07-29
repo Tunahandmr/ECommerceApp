@@ -59,7 +59,7 @@ class HomeProductAdapter(
             .skipMemoryCache(true)//for caching the image url in case phone is offline
             .into(holder.binding.homeProductIV)
 
-        holder.binding.addCartTV.setOnClickListener {
+        holder.binding.addCartButton.setOnClickListener {
             addClick(currentUuid,currentProductList.bookName.toString(),currentProductList.downloadUrl.toString(),
                 currentProductList.writer.toString(),currentProductList.price.toString())
         }

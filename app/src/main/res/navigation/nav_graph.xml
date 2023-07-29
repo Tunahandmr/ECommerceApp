@@ -85,7 +85,13 @@
         android:id="@+id/cartFragment"
         android:name="com.tunahan.ecommerceapp.view.cart.CartFragment"
         android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" />
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment"
+            app:popUpTo="@id/cartFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.tunahan.ecommerceapp.view.favorite.FavoriteFragment"
@@ -154,5 +160,27 @@
         <action
             android:id="@+id/action_homeDetailsFragment_to_favoriteFragment"
             app:destination="@id/favoriteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.tunahan.ecommerceapp.view.payment.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" >
+        <action
+            android:id="@+id/action_paymentFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_paymentFragment_to_paymentSuccessFragment"
+            app:destination="@id/paymentSuccessFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentSuccessFragment"
+        android:name="com.tunahan.ecommerceapp.view.payment.PaymentSuccessFragment"
+        android:label="fragment_payment_success"
+        tools:layout="@layout/fragment_payment_success" >
+        <action
+            android:id="@+id/action_paymentSuccessFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

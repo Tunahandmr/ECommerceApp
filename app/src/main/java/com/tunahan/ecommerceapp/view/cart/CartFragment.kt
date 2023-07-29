@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.tunahan.ecommerceapp.R
@@ -53,8 +54,38 @@ class CartFragment : Fragment() {
 
         swipeToDelete()
 
+        clickControl()
+
+        binding.orderNowButton.setOnClickListener {
+            findNavController().navigate(CartFragmentDirections.actionCartFragmentToPaymentFragment())
+        }
+
     }
 
+
+    private fun clickControl(){
+
+        cartAdapter.onIncreaseClick =  {id,price,piece,bId,bName,url,wrt->
+            val onePiecePrice = price/(piece-1)
+            val currentPrice = onePiecePrice*piece
+
+            val cart = Cart(id,bId,bName,url,wrt,currentPrice.toString(),piece)
+            homeViewModel.updateCart(cart)
+        }
+
+        cartAdapter.onDecreaseClick = {id,price,piece,bId,bName,url,wrt->
+            val onePiecePrice = price/(piece+1)
+            val currentPrice = onePiecePrice*piece
+
+            val cart = Cart(id,bId,bName,url,wrt,currentPrice.toString(),piece)
+            homeViewModel.updateCart(cart)
+        }
+
+        cartAdapter.onDeleteClick ={
+            homeViewModel.deleteCart(Cart(it,"","","","","",1))
+        }
+
+    }
 
     private fun swipeToDelete() {
 

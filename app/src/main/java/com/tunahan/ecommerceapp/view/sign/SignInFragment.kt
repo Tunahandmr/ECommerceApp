@@ -41,8 +41,8 @@ class SignInFragment : Fragment() {
             findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToHomeFragment())
         }
         binding.signInButton.setOnClickListener {
-            val email = binding.email.text.toString()
-            val password = binding.password.text.toString()
+            val email = binding.emailET.text.toString()
+            val password = binding.passwordET.text.toString()
 
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -58,7 +58,7 @@ class SignInFragment : Fragment() {
         }
 
 
-        binding.signupText.setOnClickListener {
+        binding.signupButton.setOnClickListener {
             findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToSignUpFragment())
         }
 

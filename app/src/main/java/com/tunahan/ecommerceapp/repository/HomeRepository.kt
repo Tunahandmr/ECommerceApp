@@ -37,4 +37,8 @@ private val cartDao: CartDao) {
         cartDao.deleteCart(cart)
     }
 
+    suspend fun deleteAllCarts(){
+        cartDao.deleteAllCarts()
+    }
+
 }
