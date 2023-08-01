@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".view.sign.SignInFragment">
+    tools:context=".presentation.signin.SignInFragment">
 
 
     <androidx.cardview.widget.CardView

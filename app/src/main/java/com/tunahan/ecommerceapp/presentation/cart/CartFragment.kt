@@ -1,0 +1,107 @@
+package com.tunahan.ecommerceapp.presentation.cart
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.tunahan.ecommerceapp.databinding.FragmentCartBinding
+import com.tunahan.ecommerceapp.domain.model.Cart
+import com.tunahan.ecommerceapp.common.SwipeToDeleteCallback
+import com.tunahan.ecommerceapp.viewmodel.HomeViewModel
+
+
+class CartFragment : Fragment() {
+
+    private var _binding: FragmentCartBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var homeViewModel:HomeViewModel
+    private val cartAdapter by lazy { CartAdapter(requireContext()) }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentCartBinding.inflate(inflater, container, false)
+        homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        homeViewModel.readAllCart.observe(viewLifecycleOwner, Observer {
+            cartAdapter.setData(it)
+            binding.cartRV.adapter = cartAdapter
+
+            var totalPrice=0
+            for (cartPrice in it){
+                totalPrice+=cartPrice.price.toInt()
+            }
+
+            binding.totalPriceTV.text = "Total: $totalPrice ₺"
+        })
+
+        swipeToDelete()
+
+        clickControl()
+
+        binding.orderNowButton.setOnClickListener {
+            findNavController().navigate(CartFragmentDirections.actionCartFragmentToPaymentFragment())
+        }
+
+    }
+
+
+    private fun clickControl(){
+
+        cartAdapter.onIncreaseClick =  {id,price,piece,bId,bName,url,wrt->
+            val onePiecePrice = price/(piece-1)
+            val currentPrice = onePiecePrice*piece
+
+            val cart = Cart(id,bId,bName,url,wrt,currentPrice.toString(),piece)
+            homeViewModel.updateCart(cart)
+        }
+
+        cartAdapter.onDecreaseClick = {id,price,piece,bId,bName,url,wrt->
+            val onePiecePrice = price/(piece+1)
+            val currentPrice = onePiecePrice*piece
+
+            val cart = Cart(id,bId,bName,url,wrt,currentPrice.toString(),piece)
+            homeViewModel.updateCart(cart)
+        }
+
+        cartAdapter.onDeleteClick ={
+            homeViewModel.deleteCart(Cart(it,"","","","","",1))
+        }
+
+    }
+
+    private fun swipeToDelete() {
+
+        val swipeCallback = object : SwipeToDeleteCallback() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.layoutPosition
+                val selectedFavorites = cartAdapter.carts[position]
+                homeViewModel.deleteCart(selectedFavorites)
+                cartAdapter.notifyItemRemoved(position)
+            }
+
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipeCallback)
+        itemTouchHelper.attachToRecyclerView(binding.cartRV)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+}

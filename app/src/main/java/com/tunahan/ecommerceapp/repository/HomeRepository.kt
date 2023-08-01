@@ -1,15 +1,15 @@
 package com.tunahan.ecommerceapp.repository
 
 import androidx.lifecycle.LiveData
-import com.tunahan.ecommerceapp.model.Cart
-import com.tunahan.ecommerceapp.model.Document
-import com.tunahan.ecommerceapp.model.Favorite
-import com.tunahan.ecommerceapp.room.CartDao
-import com.tunahan.ecommerceapp.room.FavoriteDao
+import com.tunahan.ecommerceapp.domain.model.Cart
+import com.tunahan.ecommerceapp.domain.model.Favorite
+import com.tunahan.ecommerceapp.data.local.dao.CartDao
+import com.tunahan.ecommerceapp.data.local.dao.FavoriteDao
 import javax.inject.Inject
 
 class HomeRepository @Inject constructor(private val favoriteDao: FavoriteDao,
-private val cartDao: CartDao) {
+                                         private val cartDao: CartDao
+) {
 
     val readAllFavorite: LiveData<List<Favorite>> = favoriteDao.readAllFavorite()
     val readAllCart: LiveData<List<Cart>> = cartDao.readAllCart()

@@ -3,8 +3,8 @@ package com.tunahan.ecommerceapp.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tunahan.ecommerceapp.model.Cart
-import com.tunahan.ecommerceapp.model.Favorite
+import com.tunahan.ecommerceapp.domain.model.Cart
+import com.tunahan.ecommerceapp.domain.model.Favorite
 import com.tunahan.ecommerceapp.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
