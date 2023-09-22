@@ -1,4 +1,4 @@
-package com.tunahan.ecommerceapp.presentation.cart
+package com.tunahan.ecommerceapp.presentation.cart.components
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.tunahan.ecommerceapp.databinding.CartRowBinding
 import com.tunahan.ecommerceapp.domain.model.Cart
 
@@ -57,7 +59,10 @@ class CartAdapter(private val context: Context) :
         holder.binding.priceCart.text = "${currentCart.price} ₺"
         holder.binding.pieceCart.text = currentCart.piece.toString()
 
-        Glide.with(context).load(currentCart.imageUrl).into(holder.binding.cartIV)
+        Glide.with(context)
+            .load(currentCart.imageUrl)
+            .transform(CenterCrop(), RoundedCorners(24))
+            .into(holder.binding.cartIV)
 
         var productCount = currentCart.piece
 

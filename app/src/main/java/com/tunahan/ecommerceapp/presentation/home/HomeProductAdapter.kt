@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.tunahan.ecommerceapp.databinding.HomeProductRowBinding
 import com.tunahan.ecommerceapp.domain.model.Product
 
@@ -42,6 +44,7 @@ class HomeProductAdapter(
 
         Glide.with(context)
             .load(currentProductList.downloadUrl)
+            .transform(CenterInside(), RoundedCorners(24))
             .skipMemoryCache(true)//for caching the image url in case phone is offline
             .into(holder.binding.homeProductIV)
 

@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.tunahan.ecommerceapp.domain.model.Cart
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CartDao {
@@ -20,8 +21,8 @@ interface CartDao {
     @Delete
     suspend fun deleteCart(cart: Cart)
 
-    @Query("SELECT * FROM cart_tables ORDER BY id ASC")
-    fun readAllCart(): LiveData<List<Cart>>
+    @Query("SELECT * FROM cart_tables")
+    fun readAllCart(): Flow<List<Cart>>
 
     @Query("DELETE FROM cart_tables")
     fun deleteAllCarts()

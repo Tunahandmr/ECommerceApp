@@ -68,11 +68,11 @@
                     android:id="@+id/addProductTextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="5dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="Add product"
-                    android:textSize="25sp"
+                    android:text="Admin page"
+                    android:textSize="20sp"
                     android:visibility="gone"
                     app:drawableEndCompat="@drawable/baseline_arrow_forward" />
 
@@ -83,31 +83,15 @@
                     android:background="@color/black" />
 
 
-
-                    <Switch
-                        android:id="@+id/darkModeSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Dark mode"
-                        android:layout_margin="8dp"
-                        android:textSize="25sp"
-                         />
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/black" />
-
                 <TextView
                     android:id="@+id/updatePasswordTextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="5dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:text="Update password"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     app:drawableEndCompat="@drawable/baseline_arrow_forward" />
 
                 <View
@@ -119,11 +103,11 @@
                     android:id="@+id/deleteUserTextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="5dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:text="Delete user"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     app:drawableEndCompat="@drawable/baseline_arrow_forward" />
 
                 <View
@@ -135,16 +119,18 @@
                     android:id="@+id/exitTextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                   android:layout_margin="5dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:text="Sign out"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     app:drawableEndCompat="@drawable/baseline_arrow_forward" />
 
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+
 
     </LinearLayout>
 

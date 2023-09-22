@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tunahan.ecommerceapp.databinding.AdminRowBinding
 import com.tunahan.ecommerceapp.domain.model.Product
+import dagger.hilt.android.AndroidEntryPoint
 
 class AdminAdapter(
     private val productList: ArrayList<Product>,
@@ -31,7 +32,6 @@ class AdminAdapter(
         val currentUuid = currentList.documentUuid.toString()
         holder.binding.uuidText.text = currentUuid
         holder.binding.bookNameText.text = currentList.bookName
-        holder.binding.publisherText.text = currentList.publisher
         holder.binding.priceText.text = "${currentList.price} ₺"
         Glide.with(context)
             .load(currentList.downloadUrl)

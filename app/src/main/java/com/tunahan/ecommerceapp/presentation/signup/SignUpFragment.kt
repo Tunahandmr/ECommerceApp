@@ -7,66 +7,79 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
+import com.tunahan.ecommerceapp.common.Resource
 import com.tunahan.ecommerceapp.databinding.FragmentSignUpBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class SignUpFragment : Fragment() {
 
 
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var auth: FirebaseAuth
+    private val signUpViewModel by viewModels<SignUpViewModel>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+      flowObserve()
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSignUpBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Initialize Firebase Auth
-        auth = Firebase.auth
+
         binding.signupButton.setOnClickListener {
             val email = binding.emailET.text.toString()
             val password = binding.passwordET.text.toString()
-            val username = binding.fullNameET.text.toString()
 
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val currentUser = auth.currentUser
-                    val profileUpdates = userProfileChangeRequest {
-                        displayName = username
-                    }
-
-                    currentUser?.let {
-                        currentUser.updateProfile(profileUpdates).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Log.d("mytag", "User profile updated.")
-                            }
-                        }
-                    }
-
-                    findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToSignInFragment())
-                }
-            }.addOnFailureListener { exception ->
-                Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG)
-                    .show()
-            }
+            signUpViewModel.signUpWithEmailAndPassword(email, password)
         }
 
         binding.backButton.setOnClickListener {
             findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToSignInFragment())
+        }
+    }
+
+    private fun flowObserve(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+
+                signUpViewModel.result.collect{
+                    when(it.signUpUser){
+                        is Resource.Success->{
+                            findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToSignInFragment())
+                        }
+
+                        is Resource.Error->{
+                            Snackbar.make(requireView(),it.signUpUser.throwable.message.toString(),
+                                Snackbar.LENGTH_LONG).setAction("Ok"){}.show()
+                        }
+                        is Resource.Loading->{}
+                    }
+                }
+
+            }
         }
     }
 

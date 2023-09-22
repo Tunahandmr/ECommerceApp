@@ -5,36 +5,36 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import com.tunahan.ecommerceapp.R
 import com.tunahan.ecommerceapp.databinding.FragmentPaymentBinding
 import com.tunahan.ecommerceapp.common.CreditCardTextFormatter
 import com.tunahan.ecommerceapp.common.isNullorEmpty
-import com.tunahan.ecommerceapp.viewmodel.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class PaymentFragment : Fragment() {
 
     private var _binding: FragmentPaymentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var homeViewModel: HomeViewModel
+    private val paymentViewModel by viewModels<PaymentViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPaymentBinding.inflate(inflater, container, false)
-        homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(binding){
+        with(binding) {
 
             backButton.setOnClickListener {
                 findNavController().navigate(PaymentFragmentDirections.actionPaymentFragmentToCartFragment())
@@ -42,15 +42,16 @@ class PaymentFragment : Fragment() {
 
             cardNumberET.addTextChangedListener(CreditCardTextFormatter())
             payNowButton.setOnClickListener {
-                if (checkInfos(cardHolderET,cardNumberET,monthET,yearET,cvcCodeET,adressET)){
+                if (checkInfos(cardHolderET, cardNumberET, monthET, yearET, cvcCodeET, adressET)) {
                     findNavController().navigate(PaymentFragmentDirections.actionPaymentFragmentToPaymentSuccessFragment())
-                    homeViewModel.deleteAllCarts()
+                    paymentViewModel.deleteAllCarts()
                 }
 
             }
         }
 
     }
+
     private fun checkInfos(
         cardHolderName: TextInputEditText,
         creditCardNumber: TextInputEditText,
@@ -63,6 +64,7 @@ class PaymentFragment : Fragment() {
             cardHolderName.isNullorEmpty(getString(R.string.warning_card_holdername)).not() -> false
             creditCardNumber.isNullorEmpty(getString(R.string.warning_card_number))
                 .not() -> false
+
             month.isNullorEmpty(getString(R.string.warning_month)).not() -> false
             year.isNullorEmpty(getString(R.string.warning_year)).not() -> false
             cvcCode.isNullorEmpty(getString(R.string.warning_cvc)).not() -> false

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue_500">#03A9F4</color>
     <color name="blue_700">#0288D1</color>
+    <color name="stroke_color">#D3D3D3</color>
 </resources>

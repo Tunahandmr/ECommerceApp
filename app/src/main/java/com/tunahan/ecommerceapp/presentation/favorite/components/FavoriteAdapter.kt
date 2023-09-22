@@ -1,4 +1,4 @@
-package com.tunahan.ecommerceapp.presentation.favorite
+package com.tunahan.ecommerceapp.presentation.favorite.components
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,8 +8,12 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.tunahan.ecommerceapp.databinding.FavoriteRowBinding
 import com.tunahan.ecommerceapp.domain.model.Favorite
+import com.tunahan.ecommerceapp.presentation.favorite.FavoriteFragmentDirections
 
 class FavoriteAdapter(
     private val context: Context
@@ -49,13 +53,14 @@ class FavoriteAdapter(
         holder.binding.favoriteUuidText.text = currentFavorite.bookId
         holder.binding.favoriteBookName.text = currentFavorite.bookName
         holder.binding.favoriteWriter.text = currentFavorite.writer
-        holder.binding.favoritePublisher.text = currentFavorite.publisher
         holder.binding.favoritePrice.text = "${currentFavorite.price} ₺"
 
         Glide.with(context).load(currentFavorite.imageUrl).skipMemoryCache(true)
+            .transform(CenterCrop(), RoundedCorners(24))
             .into(holder.binding.favoriteImageView)
 
         holder.itemView.setOnClickListener {
+
             val action = FavoriteFragmentDirections.actionFavoriteFragmentToHomeDetailsFragment(
                 currentFavorite.bookId,
                 2

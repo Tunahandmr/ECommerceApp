@@ -7,16 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tunahan.ecommerceapp.databinding.CategoryRowBinding
 import kotlinx.android.synthetic.main.category_row.view.*
 
-class BookCategoryAdapter(private val categoryList: ArrayList<String>,
-private val onClickEvent: OnClickListener
+class BookCategoryAdapter(private val categoryList: ArrayList<String>
 ) :
     RecyclerView.Adapter<BookCategoryAdapter.MyViewHolder>() {
 
     private var selectItem: Int? = 0
 
-    interface OnClickListener{
-        fun onClick(item:String)
-    }
+    var categoryFilter: (String)->Unit= {}
+
 
      class MyViewHolder(binding:CategoryRowBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -31,7 +29,8 @@ private val onClickEvent: OnClickListener
 
         holder.itemView.setOnClickListener {
             selectItem = position
-            onClickEvent.onClick(currentItem)
+           // onClickEvent.onClick(currentItem)
+            categoryFilter(currentItem)
             notifyDataSetChanged()
         }
 

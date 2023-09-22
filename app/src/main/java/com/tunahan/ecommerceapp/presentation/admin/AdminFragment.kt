@@ -14,15 +14,13 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.tunahan.ecommerceapp.databinding.FragmentAdminBinding
 import com.tunahan.ecommerceapp.domain.model.Product
-import com.tunahan.ecommerceapp.viewmodel.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AdminFragment : Fragment() {
 
     private var _binding: FragmentAdminBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var mHomeViewModel: HomeViewModel
 
     val db = Firebase.firestore
     private lateinit var adminAdapter: AdminAdapter
@@ -34,8 +32,6 @@ class AdminFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAdminBinding.inflate(inflater, container, false)
-        mHomeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
-
 
         val layoutManager = LinearLayoutManager(requireContext())
         binding.adminPageRecyclerview.layoutManager = layoutManager
@@ -71,10 +67,8 @@ class AdminFragment : Fragment() {
                             val bookName = document.get("bookName") as String?
                             val price = document.get("price") as String?
                             val writer = document.get("writer") as String?
-                            val publisher = document.get("publisher") as String?
                             val pageCount = document.get("pageCount") as String?
-                            val publicationYear = document.get("publicationYear") as String?
-                            val language = document.get("language") as String?
+                            val explanation = document.get("explanation") as String?
                             val bookUuid = document?.get("bookUuid") as String?
 
                             val readProduct = Product(
@@ -83,10 +77,8 @@ class AdminFragment : Fragment() {
                                 bookName,
                                 price,
                                 writer,
-                                publisher,
                                 pageCount,
-                                publicationYear,
-                                language,
+                                explanation,
                                 false
                             )
 

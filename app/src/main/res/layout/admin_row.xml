@@ -51,16 +51,6 @@
         />
 
     <TextView
-        android:id="@+id/publisherText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="Book name"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        />
-
-    <TextView
         android:id="@+id/priceText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.admin.update.AdminUpdateFragment">
+    tools:context=".presentation.update.AdminUpdateFragment">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -64,103 +64,102 @@
                 android:layout_margin="4dp"
                 android:textColor="@color/blue_700"/>
 
-            <EditText
-                android:id="@+id/bookNameText"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/custom_book"
-                android:hint="Book name"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
 
-            <EditText
-                android:id="@+id/priceText"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/bookNameET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Book name"
+                    android:inputType="textEmailAddress" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/custom_book"
-                android:hint="Price"
-                android:inputType="number"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
 
-            <EditText
-                android:id="@+id/writerText"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/writerET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Writer" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/custom_book"
-                android:hint="Writer"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
 
-            <EditText
-                android:id="@+id/publisherText"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/priceET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Price"
+                    android:inputType="numberPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/custom_book"
-                android:hint="Publisher"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
 
-            <EditText
-                android:id="@+id/pageCountText"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pageET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Page count"
+                    android:inputType="numberPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/custom_book"
-                android:hint="Page count"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
 
-            <EditText
-                android:id="@+id/publicationYearText"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/custom_book"
-                android:hint="Publication year"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/explanationET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Explanation"
+                    android:inputType="textEmailAddress" />
 
-            <EditText
-                android:id="@+id/languageText"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/custom_book"
-                android:hint="Language"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/updateBookButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/blue_700"
-                android:layout_marginTop="10dp"
+                android:layout_margin="8dp"
+                android:textAllCaps="false"
                 android:text="Update"
-                android:textSize="18sp"
-                app:cornerRadius="12dp" />
+                />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteBookButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textAllCaps="false"
                 android:backgroundTint="#D50000"
-                android:layout_marginTop="8dp"
                 android:text="Delete"
-                android:textSize="18sp"
-                app:cornerRadius="12dp" />
+                />
+
+
 
         </LinearLayout>
 

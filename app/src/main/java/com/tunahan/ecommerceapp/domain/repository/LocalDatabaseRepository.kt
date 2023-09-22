@@ -1,11 +1,14 @@
 package com.tunahan.ecommerceapp.domain.repository
 
-import com.tunahan.ecommerceapp.common.Resource
 import com.tunahan.ecommerceapp.domain.model.Cart
 import com.tunahan.ecommerceapp.domain.model.Favorite
+import kotlinx.coroutines.flow.Flow
 
 interface LocalDatabaseRepository {
 
+    fun readAllCart() : Flow<List<Cart>>
+
+    fun readAllFavorite() : Flow<List<Favorite>>
     suspend fun addFavorite(favorite: Favorite)
 
     suspend fun updateFavorite(favorite: Favorite)
@@ -18,5 +21,5 @@ interface LocalDatabaseRepository {
 
     suspend fun deleteCart(cart: Cart)
 
-    suspend fun deleteAllCarts()
+    fun deleteAllCarts()
 }

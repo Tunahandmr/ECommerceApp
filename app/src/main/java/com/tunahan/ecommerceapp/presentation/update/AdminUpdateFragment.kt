@@ -1,4 +1,4 @@
-package com.tunahan.ecommerceapp.presentation.admin.update
+package com.tunahan.ecommerceapp.presentation.update
 
 import android.app.Activity
 import android.content.Intent
@@ -14,8 +14,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -23,20 +23,19 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.tunahan.ecommerceapp.presentation.home.BookCategoryAdapter
 import com.tunahan.ecommerceapp.databinding.FragmentAdminUpdateBinding
+import com.tunahan.ecommerceapp.presentation.home.BookCategoryAdapter
 import com.tunahan.ecommerceapp.domain.model.Product
-import com.tunahan.ecommerceapp.viewmodel.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.UUID
 
-
+@AndroidEntryPoint
 class AdminUpdateFragment : Fragment() {
 
 
     private var _binding: FragmentAdminUpdateBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var mHomeViewModel: HomeViewModel
     private val mList = ArrayList<String>()
     private lateinit var bookCategoryAdapter: BookCategoryAdapter
     private var productList = ArrayList<Product>()
@@ -46,22 +45,30 @@ class AdminUpdateFragment : Fragment() {
 
     var myCategory = ""
 
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
-
-    private var selectedPicture: Uri? = null
-    private var selectedBitmap: Bitmap? = null
+    private lateinit var pickerLauncher: ActivityResultLauncher<PickVisualMediaRequest>
+    private var selectedUri: Uri? = null
+    private var bitmap: Bitmap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAdminUpdateBinding.inflate(inflater, container, false)
-        mHomeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        listAdd()
+        bookCategoryAdapter =
+            BookCategoryAdapter(mList)
+        val rv = binding.categoryRV
+        rv.adapter = bookCategoryAdapter
+
+        bookCategoryAdapter.categoryFilter = {
+            myCategory = it
+        }
 
         readData(args.documentUuid)
 
@@ -73,25 +80,43 @@ class AdminUpdateFragment : Fragment() {
             deleteData(args.documentUuid)
         }
 
-        registerLauncher()
+        photoPicker()
 
         binding.addImage.setOnClickListener {
-            val intentToGallery =
-                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            activityResultLauncher.launch(intentToGallery)
+            pickerLauncher.launch(
+                PickVisualMediaRequest(
+                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                )
+            )
         }
 
 
+    }
 
-        listAdd()
-        bookCategoryAdapter =
-            BookCategoryAdapter(mList, object : BookCategoryAdapter.OnClickListener {
-                override fun onClick(item: String) {
-                    myCategory = item
+
+    private fun photoPicker() {
+
+        pickerLauncher =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+
+                selectedUri = uri
+
+                uri?.let {
+                    if (Build.VERSION.SDK_INT < 28) {
+                        bitmap = MediaStore.Images
+                            .Media.getBitmap(requireActivity().contentResolver, it)
+
+                        binding.addImage.setImageBitmap(bitmap)
+                    } else {
+                        val source =
+                            ImageDecoder.createSource(requireActivity().contentResolver, it)
+                        bitmap = ImageDecoder.decodeBitmap(source)
+                        binding.addImage.setImageBitmap(bitmap)
+                    }
                 }
-            })
-        val rv = binding.categoryRV
-        rv.adapter = bookCategoryAdapter
+
+            }
+
     }
 
     private fun readData(docId: String) {
@@ -109,10 +134,8 @@ class AdminUpdateFragment : Fragment() {
                 val bookName = document?.get("bookName") as String?
                 val price = document?.get("price") as String?
                 val writer = document?.get("writer") as String?
-                val publisher = document?.get("publisher") as String?
                 val pageCount = document?.get("pageCount") as String?
-                val publicationYear = document?.get("publicationYear") as String?
-                val language = document?.get("language") as String?
+                val explanation = document?.get("explanation") as String?
                 val category = document?.get("category") as String?
                 val bookUuid = document?.get("bookUuid") as String?
 
@@ -131,13 +154,11 @@ class AdminUpdateFragment : Fragment() {
                 }
 
                 bookCategoryAdapter.setData(myCounter ?: 0)
-                binding.bookNameText.setText(bookName)
-                binding.priceText.setText(price)
-                binding.writerText.setText(writer)
-                binding.publisherText.setText(publisher)
-                binding.pageCountText.setText(pageCount)
-                binding.publicationYearText.setText(publicationYear)
-                binding.languageText.setText(language)
+                binding.bookNameET.setText(bookName)
+                binding.priceET.setText(price)
+                binding.writerET.setText(writer)
+                binding.pageET.setText(pageCount)
+                binding.explanationET.setText(explanation)
                 Glide.with(requireContext()).load(url).into(binding.addImage)
 
             }
@@ -150,13 +171,13 @@ class AdminUpdateFragment : Fragment() {
     private fun updateData(docId: String) {
         val addMap = hashMapOf<String, Any>()
 
-        if (selectedPicture != null) {
+        if (selectedUri != null) {
             val reference = storage.reference
             val uuid = UUID.randomUUID()
             val imageName = "${uuid}.jpg"
             val imageReference = reference.child("images").child(imageName)
 
-            imageReference.putFile(selectedPicture!!).addOnSuccessListener { task ->
+            imageReference.putFile(selectedUri!!).addOnSuccessListener { task ->
                 //get url
                 val loadImageReference = reference.child("images").child(imageName)
 
@@ -165,22 +186,18 @@ class AdminUpdateFragment : Fragment() {
                     val downloadUrl = uri.toString()
 
                     val date = Timestamp.now()
-                    val bookName = binding.bookNameText.text.toString()
-                    val price = binding.priceText.text.toString()
-                    val writer = binding.writerText.text.toString()
-                    val publisher = binding.publisherText.text.toString()
-                    val pageCount = binding.pageCountText.text.toString()
-                    val publicationYear = binding.publicationYearText.text.toString()
-                    val language = binding.languageText.text.toString()
+                    val bookName = binding.bookNameET.text.toString()
+                    val price = binding.priceET.text.toString()
+                    val writer = binding.writerET.text.toString()
+                    val pageCount = binding.pageET.text.toString()
+                    val explanation = binding.explanationET.text.toString()
 
                     addMap["date"] = date
                     addMap["bookName"] = bookName
                     addMap["price"] = price
                     addMap["writer"] = writer
-                    addMap["publisher"] = publisher
                     addMap["pageCount"] = pageCount
-                    addMap["publicationYear"] = publicationYear
-                    addMap["language"] = language
+                    addMap["explanation"] = explanation
                     addMap["category"] = myCategory
                     addMap["bookUuid"] = docId
                     addMap["downloadUrl"] = downloadUrl
@@ -200,22 +217,18 @@ class AdminUpdateFragment : Fragment() {
             }
         }else{
             val date = Timestamp.now()
-            val bookName = binding.bookNameText.text.toString()
-            val price = binding.priceText.text.toString()
-            val writer = binding.writerText.text.toString()
-            val publisher = binding.publisherText.text.toString()
-            val pageCount = binding.pageCountText.text.toString()
-            val publicationYear = binding.publicationYearText.text.toString()
-            val language = binding.languageText.text.toString()
+            val bookName = binding.bookNameET.text.toString()
+            val price = binding.priceET.text.toString()
+            val writer = binding.writerET.text.toString()
+            val pageCount = binding.pageET.text.toString()
+            val explanation = binding.explanationET.text.toString()
 
             addMap["date"] = date
             addMap["bookName"] = bookName
             addMap["price"] = price
             addMap["writer"] = writer
-            addMap["publisher"] = publisher
             addMap["pageCount"] = pageCount
-            addMap["publicationYear"] = publicationYear
-            addMap["language"] = language
+            addMap["explanation"] = explanation
             addMap["category"] = myCategory
             addMap["bookUuid"] = docId
 
@@ -237,41 +250,6 @@ class AdminUpdateFragment : Fragment() {
 
     }
 
-    private fun registerLauncher() {
-        activityResultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == Activity.RESULT_OK) {
-                    val intentFromResult = it.data
-                    if (intentFromResult != null) {
-                        selectedPicture = intentFromResult.data
-
-                        try {
-                            if (Build.VERSION.SDK_INT >= 28) {
-                                val source = ImageDecoder.createSource(
-                                    requireActivity().contentResolver, selectedPicture!!
-                                )
-                                selectedBitmap = ImageDecoder.decodeBitmap(source)
-                                binding.addImage.setImageBitmap(selectedBitmap)
-
-                            } else {
-                                selectedBitmap = MediaStore.Images.Media.getBitmap(
-                                    requireActivity().contentResolver, selectedPicture
-                                )
-                                binding.addImage.setImageBitmap(selectedBitmap)
-
-                            }
-
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-
-                    }
-                }
-
-            }
-
-
-    }
 
     private fun deleteData(docId: String) {
         db.collection("books").document(docId).delete()

@@ -26,10 +26,8 @@ class PaymentSuccessFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-
         binding.continueShoppingButton.setOnClickListener {
             findNavController().navigate(PaymentSuccessFragmentDirections.actionPaymentSuccessFragmentToHomeFragment())
-
         }
 
     }

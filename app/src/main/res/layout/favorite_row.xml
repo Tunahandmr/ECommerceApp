@@ -15,15 +15,18 @@
 
        <ImageView
            android:id="@+id/favoriteImageView"
-           android:layout_width="150dp"
-           android:layout_height="150dp"
+           android:layout_width="100dp"
+           android:layout_height="100dp"
+           android:layout_margin="8dp"
+           android:layout_gravity="center_vertical"
            android:src="@drawable/ic_launcher_background"
            />
 
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:orientation="vertical">
+           android:orientation="vertical"
+          >
 
 
            <TextView
@@ -52,13 +55,6 @@
                android:text="Writer name"
                android:textSize="18sp" />
 
-           <TextView
-               android:id="@+id/favoritePublisher"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_gravity="center"
-               android:text="Publisher"
-               android:textSize="15sp" />
 
            <TextView
                android:id="@+id/favoritePrice"
@@ -70,14 +66,15 @@
                android:textStyle="bold"
                />
 
-           <Button
+
+           <com.google.android.material.button.MaterialButton
                android:id="@+id/favoriteAddCart"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
+               android:layout_margin="8dp"
+               android:textAllCaps="false"
                android:text="Add Cart"
-               android:layout_marginStart="5dp"
-               android:layout_marginEnd="5dp"
-               />
+              />
 
 
        </LinearLayout>

@@ -1,6 +1,5 @@
 package com.tunahan.ecommerceapp.data.local.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -8,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.tunahan.ecommerceapp.domain.model.Favorite
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoriteDao {
@@ -20,6 +20,6 @@ interface FavoriteDao {
     @Delete
     suspend fun deleteFavorite(favorite: Favorite)
 
-    @Query("SELECT * FROM favorite_tables ORDER BY id ASC")
-    fun readAllFavorite(): LiveData<List<Favorite>>
+    @Query("SELECT * FROM favorite_tables")
+    fun readAllFavorite(): Flow<List<Favorite>>
 }

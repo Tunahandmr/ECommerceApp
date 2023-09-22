@@ -8,9 +8,7 @@ data class Product(
     var bookName: String?,
     var price: String?,
     var writer: String?,
-    var publisher: String?,
     var pageCount: String?,
-    var publicationYear: String?,
-    var language: String?,
+    var explanation: String?,
     var isFavorite: Boolean?
 )

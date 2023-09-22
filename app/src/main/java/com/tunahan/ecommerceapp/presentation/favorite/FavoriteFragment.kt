@@ -5,13 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.tunahan.ecommerceapp.databinding.FragmentFavoriteBinding
 import com.tunahan.ecommerceapp.common.SwipeToDeleteCallback
-import com.tunahan.ecommerceapp.viewmodel.HomeViewModel
+import com.tunahan.ecommerceapp.presentation.favorite.components.FavoriteAdapter
+import kotlinx.coroutines.launch
 
 
 class FavoriteFragment : Fragment() {
@@ -21,7 +24,7 @@ class FavoriteFragment : Fragment() {
 
     private val favoriteAdapter by lazy { FavoriteAdapter(requireContext()) }
 
-    private lateinit var mHomeViewModel: HomeViewModel
+    private lateinit var favoriteViewModel: FavoriteViewModel
 
 
 
@@ -32,8 +35,8 @@ class FavoriteFragment : Fragment() {
     ): View {
         _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
 
-        mHomeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
 
+        favoriteViewModel = ViewModelProvider(requireActivity())[FavoriteViewModel::class.java]
        // favoriteAdapter = FavoriteAdapter(requireContext())
 
         return binding.root
@@ -42,10 +45,27 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mHomeViewModel.readAllFavorite.observe(viewLifecycleOwner, Observer {
+      /*  mHomeViewModel.readAllFavorite.observe(viewLifecycleOwner, Observer {
             favoriteAdapter.setData(it)
             binding.recyclerView.adapter = favoriteAdapter
-        })
+        })*/
+
+       /* favoriteViewModel.readAllFavorite.observe(viewLifecycleOwner, Observer {
+            favoriteAdapter.setData(it)
+            binding.recyclerView.adapter = favoriteAdapter
+        })*/
+
+        lifecycleScope.launch{
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                favoriteViewModel.readAllFavorite.collect{
+                    favoriteAdapter.setData(it.favorites)
+                    binding.recyclerView.adapter = favoriteAdapter
+                }
+            }
+        }
+
+
+        favoriteIsEmpty()
 
         swipeToDelete()
 
@@ -57,7 +77,8 @@ class FavoriteFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.layoutPosition
                 val selectedFavorites = favoriteAdapter.favorites[position]
-                mHomeViewModel.deleteFavorite(selectedFavorites)
+                favoriteViewModel.deleteByIdFavorite(selectedFavorites)
+               // mHomeViewModel.deleteFavorite(selectedFavorites)
                 favoriteAdapter.notifyItemRemoved(position)
             }
 
@@ -65,6 +86,27 @@ class FavoriteFragment : Fragment() {
 
         val itemTouchHelper = ItemTouchHelper(swipeCallback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+    }
+
+    private fun favoriteIsEmpty(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                favoriteViewModel.favoriteIsEmpty.collect{
+                    it.let {
+                        if (it.isLoading){
+                            binding.noFavoritesIV.visibility = View.VISIBLE
+                            binding.noFavoritesTV.visibility = View.VISIBLE
+                        }else{
+                            binding.noFavoritesIV.visibility = View.GONE
+                            binding.noFavoritesTV.visibility = View.GONE
+                        }
+                    }
+
+                }
+            }
+
+        }
+
     }
 
     override fun onDestroyView() {

@@ -1,9 +1,7 @@
-package com.tunahan.ecommerceapp.domain.use_case
+package com.tunahan.ecommerceapp.domain.use_case.cart
 
-import com.tunahan.ecommerceapp.common.Resource
 import com.tunahan.ecommerceapp.domain.model.Cart
 import com.tunahan.ecommerceapp.domain.repository.LocalDatabaseRepository
-import java.lang.Exception
 import javax.inject.Inject
 
 class AddCartUseCase @Inject constructor(
