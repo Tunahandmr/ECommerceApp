@@ -5,132 +5,135 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context=".view.profile.ProfileFragment">
+    tools:context=".presentation.profile.ProfileFragment">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/profileIV"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:src="@drawable/profile_image" />
+
+        <TextView
+            android:id="@+id/userNameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Username"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/profileIV"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                android:layout_margin="8dp"
-                android:src="@drawable/profile" />
+        <TextView
+            android:id="@+id/emailText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="username@gmail.com"
+            android:textAlignment="center"
+            android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/userNameText"
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/black"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="Username"
-                android:textAlignment="center"
-                android:textSize="25sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/emailText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="username@gmail.com"
-                android:textAlignment="center"
-                android:textSize="20sp" />
+                android:orientation="vertical">
 
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="15dp">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/addProductTextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_margin="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="Admin page"
+                    android:textSize="20sp"
+                    android:visibility="gone"
+                    app:drawableEndCompat="@drawable/baseline_arrow_forward" />
 
-                    <TextView
-                        android:id="@+id/addProductTextButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:text="Add product"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:visibility="gone"
-                        app:drawableEndCompat="@drawable/ic_arrow_right" />
-
-
-                    <TextView
-                        android:id="@+id/changeProfileTextButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:text="Change profile image"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        app:drawableEndCompat="@drawable/ic_arrow_right" />
-
-                    <TextView
-                        android:id="@+id/updatePasswordTextButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:text="Update password"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        app:drawableEndCompat="@drawable/ic_arrow_right" />
-
-                    <TextView
-                        android:id="@+id/deleteUserTextButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:text="Delete user"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        app:drawableEndCompat="@drawable/ic_arrow_right" />
-
-                    <TextView
-                        android:id="@+id/exitTextButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:text="Exit"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        app:drawableEndCompat="@drawable/ic_arrow_right"
-                        />
+                <View
+                    android:id="@+id/productView"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
 
 
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/updatePasswordTextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="Update password"
+                    android:textSize="20sp"
+                    app:drawableEndCompat="@drawable/baseline_arrow_forward" />
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
+
+                <TextView
+                    android:id="@+id/deleteUserTextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="Delete user"
+                    android:textSize="20sp"
+                    app:drawableEndCompat="@drawable/baseline_arrow_forward" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
+
+                <TextView
+                    android:id="@+id/exitTextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                   android:layout_margin="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="Sign out"
+                    android:textSize="20sp"
+                    app:drawableEndCompat="@drawable/baseline_arrow_forward" />
+
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+
+    </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

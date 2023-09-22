@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.cart.CartFragment">
+    tools:context=".presentation.cart.CartFragment">
 
     <TextView
         android:id="@+id/totalPriceTV"
@@ -30,7 +30,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartRV"
         android:layout_width="match_parent"
@@ -40,7 +39,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/cart_row"
-        tools:itemCount="8"
         android:layout_marginBottom="4dp"/>
+
+    <ImageView
+        android:id="@+id/cartEmptyIV"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/cart_empty"
+        app:layout_constraintBottom_toTopOf="@+id/totalPriceTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/cartRV"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cartEmptyTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No cart yet!"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cartEmptyIV" />
 </androidx.constraintlayout.widget.ConstraintLayout>
