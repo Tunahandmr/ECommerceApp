@@ -1,6 +1,7 @@
 package com.tunahan.ecommerceapp.domain.repository
 
 import android.net.Uri
+import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.activity.result.ActivityResult
 import androidx.fragment.app.FragmentActivity
@@ -8,12 +9,19 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import com.tunahan.ecommerceapp.common.Resource
+import com.tunahan.ecommerceapp.common.UiState
 import com.tunahan.ecommerceapp.domain.model.Image
 import com.tunahan.ecommerceapp.domain.model.Product
 import com.tunahan.ecommerceapp.domain.model.User
 import kotlinx.coroutines.flow.Flow
 
 interface FirebaseRepository {
+
+    fun getBooks(categoryFilter: String,result: (UiState<List<Product>>) -> Unit)
+    fun addBook(product: Product, result: (UiState<Pair<Product, String>>) -> Unit)
+    fun updateBook(product: Product,docId: String, result: (UiState<String>) -> Unit)
+    fun deleteBook(product: Product,docId: String, result: (UiState<String>) -> Unit)
+
     fun getBooksFromFirestore(): Flow<Resource<List<Product>>>
     suspend fun addBookToFirestore(title: String, author: String): Resource<Boolean>
     suspend fun deleteBookFromFirestore(bookId: String): Resource<Boolean>
