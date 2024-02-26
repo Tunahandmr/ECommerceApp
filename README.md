@@ -31,11 +31,11 @@ Screens
 </br>
 
 | Details | No favorites | No cart |
-| --- | ------- |
+| --- | ------- | ------- |
 |<img src="https://github.com/Tunahandmr/ECommerceApp/assets/100168989/6a632c69-ada8-4625-9413-237b12e4ad00"/>|<img src="https://github.com/Tunahandmr/ECommerceApp/assets/100168989/1ad6e65b-4ed1-45eb-8479-837952b249bc" />|<img src="https://github.com/Tunahandmr/ECommerceApp/assets/100168989/b58d4dbe-3d48-4184-a9de-0d6f90f63d54" />|
 
 </br>
 
 | Favorites | Cart | Add |
-| --- | ------- |
+| --- | ------- | ------- |
 |<img src="https://github.com/Tunahandmr/ECommerceApp/assets/100168989/492f09e8-34e0-428b-90d3-8230f9985978"/>|<img src="https://github.com/Tunahandmr/ECommerceApp/assets/100168989/0bd81c1c-0783-4736-b593-4bd3d6596676" />|<img src="https://github.com/Tunahandmr/ECommerceApp/assets/100168989/5fbf7a50-99b6-4744-a186-c4a4d9202627" />|
